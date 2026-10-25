@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#090812">
+<title>TOOLS VORTEX VERSE</title>
+<style>
+:root{--bg:#090812;--panel:#141323;--panel2:#19172b;--text:#f7f4ff;--muted:#a6a1bb;--violet:#a46cff;--pink:#ff4d83;--blue:#58c7ff;--line:rgba(164,108,255,.45)}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(ellipse at 20% -10%,#48205a66,transparent 38%),radial-gradient(ellipse at 100% 30%,#173d6950,transparent 35%),var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+.page{max-width:760px;margin:auto;min-height:100vh;padding-bottom:34px;background:linear-gradient(180deg,rgba(12,11,25,.94),rgba(8,14,26,.98));border-left:1px solid #a46cff55;border-right:1px solid #a46cff55}
+.header{position:relative;display:flex;align-items:center;gap:12px;padding:20px 15px 18px;border-bottom:1px solid var(--line);background:linear-gradient(110deg,#171126,#101a2b);box-shadow:0 8px 30px #0004}
+.logo{width:66px;height:66px;flex:none;display:grid;place-items:center;border-radius:21px;padding:2px;background:linear-gradient(140deg,var(--pink),var(--violet),var(--blue));box-shadow:0 0 25px #a46cff30}
+.logo img{height:100%;width:100%;display:block;object-fit:cover;border-radius:19px;background:#111020}
+.brand{min-width:0;font-size:clamp(22px,6.4vw,37px);font-weight:1000;line-height:1.04;letter-spacing:-1.2px}
+.brand span{background:linear-gradient(90deg,#ff6c9c,#b58aff 65%,#70d8ff);background-clip:text;-webkit-background-clip:text;color:transparent}
+.profile{margin-left:auto;flex:none;border:1px solid #b184ff77;border-radius:30px;padding:10px 12px;background:#a46cff13;color:#d7c3ff;font-size:11px;font-weight:850;white-space:nowrap;box-shadow:inset 0 0 16px #a46cff0c}
+.section{padding:0 15px}
+.home{display:flex;align-items:center;gap:10px;padding:17px 4px 13px;border-bottom:1px solid var(--line);font-size:22px;font-weight:900;letter-spacing:.2px}
+.sym{color:#bb8bff;text-shadow:0 0 16px #a46cff55}
+.social,.main-card,.item-card,.tool-feature{background:linear-gradient(145deg,rgba(28,25,47,.96),rgba(14,22,37,.97));border:1px solid var(--line);box-shadow:0 12px 28px #0002,inset 0 1px #ffffff06}
+.social{margin-top:16px;border-radius:23px;padding:16px 15px;display:flex;align-items:center;gap:12px;font-size:clamp(15px,4vw,21px);font-weight:850;line-height:1.4;overflow-wrap:anywhere}
+.mini-logo{width:43px;height:43px;flex:none;border-radius:15px;display:grid;place-items:center;background:linear-gradient(135deg,var(--pink),var(--violet),var(--blue));color:#fff;font-weight:1000;box-shadow:0 0 18px #a46cff2c}
+.subline{color:var(--muted);font-size:.72em;font-weight:650;letter-spacing:.5px}
+.main-card{margin-top:15px;border-radius:25px;padding:20px 16px}
+.card-title{display:flex;align-items:center;justify-content:center;gap:10px;font-size:19px;font-weight:900;letter-spacing:.2px}
+.card-title .sym{font-size:27px}
+.desc{font-size:13px;color:#b2aec5;line-height:1.7;margin:15px 0 19px}
+.pill-button{display:block;width:min(100%,360px);margin:auto;border:1px solid #b17cff88;border-radius:16px;padding:12px;background:linear-gradient(100deg,#6d3bba,#3b4a9b);color:#fff;font-size:14px;font-weight:850;box-shadow:0 7px 24px #814de833;cursor:pointer}
+.section-heading{margin:24px 0 0;padding:0 0 8px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px;font-size:22px;font-weight:950;letter-spacing:.3px}
+.section-heading .sym{font-size:25px}
+.item-card{margin-top:13px;border-radius:22px;padding:14px 13px;display:flex;align-items:center;gap:12px;min-width:0}
+.app-icon{width:57px;height:57px;flex:none;border-radius:16px;display:grid;place-items:center;font-size:27px;background:linear-gradient(145deg,#49306e,#1c5276);border:1px solid #a9a0ff45;box-shadow:inset 0 1px #fff2}
+.item-info{min-width:0;flex:1}
+.item-info h3{font-size:clamp(15px,4.2vw,21px);margin:0 0 5px;font-weight:900;overflow-wrap:anywhere}
+.item-info p{font-size:12px;color:#a7a2bd;margin:0;overflow-wrap:anywhere}
+.badge{flex:none;border:1px solid #8d71ed99;border-radius:12px;padding:8px 10px;min-width:79px;text-align:center;background:linear-gradient(120deg,#29204a,#172b49);color:#d0bcff;font-weight:900;font-size:12px;cursor:pointer}
+.credit{text-align:center;margin-top:23px;padding:0 0 11px;border-bottom:1px solid var(--line);color:#9288b3;font-size:12px;letter-spacing:.4px}
+.tools-heading{margin-top:20px}
+.tool-feature{margin-top:13px;border-radius:21px;padding:17px 15px;display:flex;align-items:center;gap:13px;min-height:89px}
+.tool-feature .glyph{font-size:27px;color:#b98aff;filter:drop-shadow(0 0 9px #a46cff44)}
+.tool-feature h3{font-size:14px;margin:0;font-weight:900;letter-spacing:.25px}
+.tool-feature p{font-size:12px;line-height:1.55;color:var(--muted);margin:6px 0 0}
+button{transition:transform .18s,filter .18s;cursor:pointer}
+button:hover{filter:brightness(1.13)}button:active{transform:scale(.98)}
+.sensitivity-card{display:block;margin-top:13px;padding:22px 16px 18px;border:1px solid var(--line);border-radius:22px;background:linear-gradient(145deg,rgba(28,25,47,.96),rgba(14,22,37,.97));box-shadow:0 12px 28px #0002,inset 0 1px #ffffff06}
+.sensitivity-title{display:flex;align-items:center;gap:10px;margin:0 0 22px 10px;color:var(--text);font-size:clamp(15px,4.2vw,21px);font-weight:900;letter-spacing:.2px}
+.sensitivity-title .glyph{font-size:25px;color:#bb8bff}
+.sens-row{margin:0 0 23px}
+.sens-label{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:13px;color:var(--text);font-size:15px;font-weight:800}
+.sens-value{color:#d0bcff;font-size:17px;font-weight:900;font-variant-numeric:tabular-nums}
+.sens-slider{display:block;width:100%;height:24px;margin:0;appearance:none;-webkit-appearance:none;background:transparent;cursor:pointer}
+.sens-slider::-webkit-slider-runnable-track{height:4px;border-radius:10px;background:#29204a}
+.sens-slider::-moz-range-track{height:4px;border-radius:10px;background:#29204a}
+.sens-slider::-webkit-slider-thumb{appearance:none;-webkit-appearance:none;width:20px;height:20px;margin-top:-8px;border-radius:50%;background:#a46cff;border:1px solid #d0bcff;box-shadow:0 0 10px #a46cff44}
+.sens-slider::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:#a46cff;border:1px solid #d0bcff}
+.sens-preset{display:block;width:100%;margin-top:4px;padding:14px 12px;border:1px solid #8d71ed99;border-radius:12px;background:linear-gradient(120deg,#29204a,#172b49);color:#d0bcff;font-size:15px;font-weight:800}
+.sens-note{margin:12px 2px 0;color:var(--muted);font-size:11px;line-height:1.5;text-align:center}
+.settingx-heading{margin:24px 0 0;padding:0 0 8px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px;font-size:22px;font-weight:950;letter-spacing:.3px;color:var(--text)}
+.settingx-heading .settingx-symbol{font-size:25px;color:var(--violet)}
+.settingx-card{margin-top:13px;border:1px solid var(--line);border-radius:22px;padding:22px 20px;background:linear-gradient(145deg,rgba(28,25,47,.96),rgba(14,22,37,.97));box-shadow:0 12px 28px #0002,inset 0 1px #ffffff06}
+.settingx-row{min-height:54px;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:4px 0}
+.settingx-label{color:#c4e1f8;font-size:clamp(13px,3.8vw,18px);font-weight:950;letter-spacing:.25px;line-height:1.25}
+.settingx-switch{position:relative;display:block;flex:none;width:102px;height:48px;border:0;border-radius:28px;background:#202020;padding:0;cursor:pointer;box-shadow:none}
+.settingx-switch::before{content:"";position:absolute;width:38px;height:38px;left:5px;top:5px;border-radius:50%;background:#fff;transition:transform .2s,background .2s}
+.settingx-switch[aria-checked="true"]{background:linear-gradient(120deg,#6d3bba,#3b4a9b)}
+.settingx-switch[aria-checked="true"]::before{transform:translateX(54px);background:#fff}
+.settingx-switch:focus-visible{outline:2px solid #258dd8;outline-offset:3px}
+@media(max-width:390px){.settingx-card{padding:18px 15px}.settingx-switch{width:92px;height:44px}.settingx-switch::before{width:34px;height:34px;left:5px;top:5px}.settingx-switch[aria-checked="true"]::before{transform:translateX(48px)}.settingx-label{font-size:13px}}
+@media(max-width:390px){.header{padding:15px 10px}.logo{width:55px;height:55px;border-radius:17px}.logo span{border-radius:15px}.brand{font-size:23px}.profile{font-size:10px;padding:8px}.section{padding:0 11px}.app-icon{width:50px;height:50px}.badge{min-width:68px;padding:7px 8px;font-size:11px}.item-card{gap:9px;padding:13px 10px}.social{padding:14px 12px}.sensitivity-card{padding:19px 13px 16px}.sens-label{font-size:14px}}
+.settingx-toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,18px);width:max-content;max-width:calc(100vw - 32px);padding:13px 18px;border:1px solid var(--line);border-radius:14px;background:linear-gradient(145deg,rgba(28,25,47,.98),rgba(14,22,37,.98));color:var(--text);font-size:14px;font-weight:850;text-align:center;box-shadow:0 12px 28px #0005;opacity:0;visibility:hidden;z-index:9999;transition:opacity .2s,transform .2s,visibility .2s}
+.settingx-toast.show{opacity:1;visibility:visible;transform:translate(-50%,0)}
+</style>
+</head>
+<body>
+<main class="page">
+<header class="header">
+  <div class="logo"><img src="https://files.catbox.moe/bfhbjh.png" alt="Logo Tools Vortex Verse"></div>
+  <div class="brand">TOOLS <span>VORTEX VERSE</span></div>
+  <button class="profile" onclick="showMessage('Join Saluran Admin Vortex https://whatsapp.com/channel/0029Vb65oya2Jl8IkD5zyM2a Dijamin Full File Dan Config')">◈ ADMIN</button>
+</header>
+<div class="section">
+  <div class="home"><span class="sym">◆</span> HOME</div>
+  <div class="social" onclick="openLink('social')" role="button" tabindex="0">
+    <div class="mini-logo">VV</div>
+    <div>TIKTOK : VORTEX VERSE<br><span class="subline">OFFICIAL COMMUNITY</span></div>
+  </div>
+  <section class="main-card">
+    <div class="card-title"><span class="sym">⬡</span> TOOLS VORTEX VERSE</div>
+    <p class="desc">Selamat datang di tools Vortex Verse. Pilih fitur yang tersedia dan gunakan sesuai kebutuhan. Jika menemukan masalah, laporkan melalui tombol di bawah.</p>
+    <button class="pill-button" onclick="openLink('bug')">✚ &nbsp; Lapor Bug</button>
+  </section>
+  <div class="section-heading"><span class="sym">▣</span> GAME</div>
+  <div class="item-card">
+    <div class="app-icon">🔥</div>
+    <div class="item-info"><h3>Free Fire</h3><p>com.dts.freefireth</p></div>
+    <button class="badge" onclick="launchApp('com.dts.freefireth')">BIASA ↗</button>
+  </div>
+  <div class="item-card">
+    <div class="app-icon">⚡</div>
+    <div class="item-info"><h3>Free Fire Max</h3><p>com.dts.freefiremax</p></div>
+    <button class="badge" onclick="launchApp('com.dts.freefiremax')">MAX ↗</button>
+  </div>
+  <div class="credit">VORTEX VERSE · OFFICIAL COMMUNITY ✦</div>
+  <div class="section-heading tools-heading"><span class="sym">⚙</span> TOOLS</div>
+  <section class="sensitivity-card" aria-label="Generate Sensitivity">
+    <h2 class="sensitivity-title"><span class="glyph">↗☛</span> GENERATE SENSITIVITY</h2>
+    <div class="sens-row"><label class="sens-label" for="general"><span>General</span><output class="sens-value" id="generalValue">180</output></label><input class="sens-slider" id="general" type="range" min="0" max="200" value="180" oninput="updateSensValue('general')"></div>
+    <div class="sens-row"><label class="sens-label" for="rdot"><span>R.dot</span><output class="sens-value" id="rdotValue">80</output></label><input class="sens-slider" id="rdot" type="range" min="0" max="200" value="80" oninput="updateSensValue('rdot')"></div>
+    <div class="sens-row"><label class="sens-label" for="x2"><span>X2 Scope</span><output class="sens-value" id="x2Value">120</output></label><input class="sens-slider" id="x2" type="range" min="0" max="200" value="120" oninput="updateSensValue('x2')"></div>
+    <div class="sens-row"><label class="sens-label" for="x4"><span>X4 Scope</span><output class="sens-value" id="x4Value">96</output></label><input class="sens-slider" id="x4" type="range" min="0" max="200" value="96" oninput="updateSensValue('x4')"></div>
+    <div class="sens-row"><label class="sens-label" for="awm"><span>AWM Scope</span><output class="sens-value" id="awmValue">80</output></label><input class="sens-slider" id="awm" type="range" min="0" max="200" value="80" oninput="updateSensValue('awm')"></div>
+    <div class="sens-row"><label class="sens-label" for="quicklock"><span>QUICK LOCK</span><output class="sens-value" id="quicklockValue">80</output></label><input class="sens-slider" id="quicklock" type="range" min="0" max="200" value="80" oninput="updateSensValue('quicklock')"></div>
+    <button class="sens-preset" onclick="showSettingXToast('Sensitivtiy Berhasil Di Ubah, Silahkan Buka Free Fire!')">General</button>
+    <p class="sens-note" id="sensNote">Geser slider untuk mengatur nilai sensitivitas. Tekan General untuk menampilkan notifikasi.</p>
+  </section>
+  <div class="settingx-heading"><span class="settingx-symbol">☷</span> SETTINGX MENU</div>
+  <section class="settingx-card" aria-label="SettingX Menu">
+    <div class="settingx-row"><span class="settingx-label">EASY DRAG 57%</span><button class="settingx-switch" type="button" role="switch" aria-checked="false" aria-label="Easy Drag 57%" onclick="toggleSettingX(this)"></button></div>
+    <div class="settingx-row"><span class="settingx-label">SENSITIVITY OPTIMAZE</span><button class="settingx-switch" type="button" role="switch" aria-checked="false" aria-label="Sensitivity Optimaze" onclick="toggleSettingX(this)"></button></div>
+    <div class="settingx-row"><span class="settingx-label">AIM ASSIST</span><button class="settingx-switch" type="button" role="switch" aria-checked="false" aria-label="Aim Assist" onclick="toggleSettingX(this)"></button></div>
+    <div class="settingx-row"><span class="settingx-label">TOUCH RESPONSIVE</span><button class="settingx-switch" type="button" role="switch" aria-checked="false" aria-label="Touch Responsive" onclick="toggleSettingX(this)"></button></div>
+  </section>
+  <div style="text-align:center;margin-top:24px;padding:16px 10px 8px;border-top:1px solid rgba(164,108,255,.45);color:#a6a1bb;font-size:12px;font-weight:800;letter-spacing:1px;">
+    <span style="background:linear-gradient(90deg,#ff6c9c,#b58aff 65%,#70d8ff);-webkit-background-clip:text;background-clip:text;color:transparent;">WebTools - Vortex Verse 2026</span>
+  </div>
+</div>
+</main>
+<div id="settingxToast" class="settingx-toast" role="status" aria-live="polite"></div>
+<script>
+const links={social:'https://youtube.com/@vortex_verse_id?si=TnfTcHXUhHmrmo3w',bug:'https://whatsapp.com/channel/0029Vb65oya2Jl8IkD5zyM2a',sensitivity:'MASUKKAN_LINK_GENERAL_DI_SINI'};
+function openLink(key){if(links[key])window.open(links[key],'_blank');else showMessage('Link belum diatur. Isi URL pada objek "links" di bagian JavaScript.');}
+function showMessage(message){alert(message);}
+function launchApp(packageName) {
+  const url = packageName === 'com.dts.freefireth'
+    ? 'https://play.google.com/store/apps/details?id=com.dts.freefireth'
+    : 'https://play.google.com/store/apps/details?id=com.dts.freefiremax';
+
+  window.location.href =
+    'intent://#Intent;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;package='
+    + packageName
+    + ';S.browser_fallback_url='
+    + encodeURIComponent(url)
+    + ';end';
+}
+  window.location.href = 'intent://#Intent;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;package=' + packageName + ';end';
+  
+let settingxToastTimer;
+function showSettingXToast(message){
+  const toast=document.getElementById("settingxToast");
+  toast.textContent=message;
+  toast.classList.add("show");
+  clearTimeout(settingxToastTimer);
+  settingxToastTimer=setTimeout(()=>toast.classList.remove("show"),3000);
+}
+function toggleSettingX(button){
+  const enabled=button.getAttribute("aria-checked")==="true";
+  const nextEnabled=!enabled;
+  button.setAttribute("aria-checked",String(nextEnabled));
+  const label=button.getAttribute("aria-label") || "Pengaturan";
+  showSettingXToast(label+" "+(nextEnabled?"Aktif":"Non Aktif"));
+}
+function updateSensValue(id){
+  const slider=document.getElementById(id);
+  document.getElementById(id+'Value').textContent=slider.value;
+  document.getElementById('sensNote').textContent='Nilai sensitivitas sudah disesuaikan. Ini referensi pengaturan; hasil dapat berbeda di tiap perangkat.';
+}
+</script>
+</body>
+</html>
