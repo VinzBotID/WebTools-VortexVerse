@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="id"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin</title>
+<style>
+  body{font-family:sans-serif;background:#090812;color:#fff;margin:0;padding:16px}
+  input,textarea,button{width:100%;box-sizing:border-box;margin:6px 0;padding:10px;border-radius:8px;border:1px solid #444;background:#15122b;color:#fff}
+content://com.android.externalstorage.documents/tree/primary%3ATes%20Site::primary:Tes Site/admin.htmlcontent://com.android.externalstorage.documents/tree/primary%3ATes%20Site::primary:Tes Site/admin.html  textarea{height:65vh;font-family:monospace;font-size:13px}
+  button{background:#7c3aed;border:0;cursor:pointer}
+</style></head><body>
+<h3>Admin Editor</h3>
+<input id="pw" type="password" placeholder="Password admin">
+<button onclick="load()">Muat HTML saat ini</button>
+<textarea id="code" placeholder="Tempel seluruh kode HTML di sini"></textarea>
+<button onclick="save()">Simpan &amp; Publish</button>
+<p id="msg"></p>
+<script>
+const h = () => ({ 'Content-Type':'application/json', Authorization:'Bearer '+pw.value });
+async function load(){
+  const r = await fetch('/api/save',{headers:h()}); const d = await r.json();
+  if(!r.ok) return msg.textContent = d.error;
+  code.value = d.html || '(masih memakai default.html — tempel kode baru di sini)';
+}
+async function save(){
+  const r = await fetch('/api/save',{method:'POST',headers:h(),body:JSON.stringify({html:code.value})});
+  const d = await r.json();
+  msg.textContent = r.ok ? '✅ Tersimpan, cek halaman utama' : d.error;
+}
+</script></body></html>
