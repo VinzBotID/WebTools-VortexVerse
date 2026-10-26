@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>ADMIN VIP - VORTEX VERSE</title>
+<style>
+:root{--bg:#090812;--text:#f7f4ff;--muted:#a6a1bb;--violet:#a46cff;--pink:#ff4d83;--blue:#58c7ff;--line:rgba(164,108,255,.45);--ok:#19d6a0;--bad:#ff718a}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(ellipse at 20% -10%,#48205a66,transparent 38%),var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;min-height:100vh}
+.wrap{max-width:760px;margin:auto;padding:0 15px 40px}
+h1{margin:0;padding:22px 0 16px;font-size:clamp(22px,6vw,32px);font-weight:950;letter-spacing:-.8px;border-bottom:1px solid var(--line)}
+h1 span{background:linear-gradient(90deg,#ff6c9c,#b58aff 65%,#70d8ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.card{margin-top:16px;padding:18px 16px;border:1px solid var(--line);border-radius:22px;background:linear-gradient(145deg,rgba(28,25,47,.96),rgba(14,22,37,.97))}
+.card h2{margin:0 0 14px;font-size:17px;font-weight:900}
+label{display:block;margin:12px 0 6px;color:var(--muted);font-size:12px;font-weight:700}
+input,select{width:100%;padding:13px;border:1px solid var(--line);border-radius:11px;outline:none;background:#0c0b18;color:#fff;font-size:14px;font-family:inherit}
+input:focus,select:focus{border-color:var(--violet)}
+.row{display:flex;gap:8px}
+.row>*{flex:1}
+.row>.fit{flex:none}
+button{padding:13px 14px;border:1px solid #b17cff88;border-radius:12px;background:linear-gradient(100deg,#6d3bba,#3b4a9b);color:#fff;font-weight:850;font-size:14px;cursor:pointer;font-family:inherit}
+button.ghost{background:#29204a;border-color:var(--line)}
+button.danger{background:#3a1523;border-color:#ff718a88;color:#ff9db0;padding:9px 11px;font-size:12px}
+button.small{padding:9px 11px;font-size:12px}
+button:disabled{opacity:.5;cursor:wait}
+.full{width:100%;margin-top:16px}
+.msg{margin-top:12px;min-height:18px;font-size:13px;font-weight:700}
+.msg.ok{color:var(--ok)} .msg.bad{color:var(--bad)}
+.hidden{display:none}
+.result{margin-top:14px;padding:13px;border:1px dashed var(--violet);border-radius:12px;background:#0c0b18;font-size:13px;line-height:1.7;overflow-wrap:anywhere}
+.result b{color:#d0bcff}
+.user{display:flex;align-items:center;gap:10px;padding:13px 0;border-bottom:1px solid rgba(164,108,255,.22)}
+.user:last-child{border-bottom:0}
+.user .info{flex:1;min-width:0}
+.user .name{font-weight:900;font-size:15px;overflow-wrap:anywhere}
+.user .meta{margin-top:3px;color:var(--muted);font-size:11px}
+.tag{display:inline-block;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:850;border:1px solid}
+.tag.on{color:var(--ok);border-color:var(--ok)} .tag.off{color:var(--bad);border-color:var(--bad)}
+.empty{padding:14px 0;color:var(--muted);font-size:13px;text-align:center}
+.top{display:flex;justify-content:space-between;align-items:center;gap:10px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>ADMIN <span>VIP</span></h1>
+
+  <!-- LOGIN ADMIN -->
+  <section class="card" id="loginCard">
+    <h2>Masuk admin</h2>
+    <label for="adminKey">Admin key</label>
+    <input id="adminKey" type="password" placeholder="Admin key" autocomplete="current-password">
+    <button class="full" id="btnLogin">Masuk</button>
+    <div class="msg" id="loginMsg"></div>
+  </section>
+
+  <!-- PANEL -->
+  <div id="panel" class="hidden">
+    <section class="card">
+      <div class="top"><h2 style="margin:0">Buat user VIP</h2><button class="ghost small" id="btnLogout">Keluar</button></div>
+      <label for="newUser">Username</label>
+      <input id="newUser" placeholder="mis. budi_vip" autocomplete="off" autocapitalize="none">
+      <label for="newPass">Password</label>
+      <div class="row">
+        <input id="newPass" placeholder="Minimal 6 karakter" autocomplete="off">
+        <button class="ghost fit" id="btnGen" type="button">Acak</button>
+      </div>
+      <label for="newDays">Masa aktif</label>
+      <select id="newDays">
+        <option value="7">7 hari</option>
+        <option value="30" selected>30 hari</option>
+        <option value="90">90 hari</option>
+        <option value="365">1 tahun</option>
+        <option value="0">Permanen</option>
+      </select>
+      <button class="full" id="btnCreate">Buat user</button>
+      <div class="msg" id="createMsg"></div>
+      <div class="result hidden" id="result"></div>
+    </section>
+
+    <section class="card">
+      <div class="top"><h2 style="margin:0">Daftar user VIP</h2><button class="ghost small" id="btnRefresh">Muat ulang</button></div>
+      <div id="userList"><div class="empty">Memuat…</div></div>
+    </section>
+  </div>
+</div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+let KEY = '';
+
+
+function say(el, text, ok) { el.textContent = text; el.className = 'msg ' + (ok ? 'ok' : 'bad'); }
+
+async function api(action, data) {
+  const res = await fetch('/api/vip', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + KEY },
+    body: JSON.stringify(Object.assign({ action }, data || {}))
+  });
+  const out = await res.json().catch(() => ({}));
+  if (!res.ok || !out.ok) throw new Error(out.error || 'Gagal (' + res.status + ')');
+  return out;
+}
+
+function fmtDate(ms) {
+  return new Date(ms).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
+}
+
+/* ---------- login admin ---------- */
+$('btnLogin').onclick = async () => {
+  KEY = $('adminKey').value;
+  if (!KEY) return say($('loginMsg'), 'Isi admin key.', false);
+  $('btnLogin').disabled = true;
+  try {
+    await api('admin_list');
+    try { sessionStorage.setItem('vv_key', KEY); } catch (e) {}
+    $('loginCard').classList.add('hidden');
+    $('panel').classList.remove('hidden');
+    loadUsers();
+  } catch (e) {
+    say($('loginMsg'), e.message === 'Failed to fetch' ? 'Tidak bisa terhubung ke server.' : e.message, false);
+  }
+  $('btnLogin').disabled = false;
+};
+
+$('btnLogout').onclick = () => {
+  try { sessionStorage.removeItem('vv_key'); } catch (e) {}
+  KEY = ''; $('adminKey').value = '';
+  $('panel').classList.add('hidden');
+  $('loginCard').classList.remove('hidden');
+};
+
+/* ---------- buat user ---------- */
+$('btnGen').onclick = () => {
+  const chars = 'abcdefghjkmnpqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ23456789';
+  const r = crypto.getRandomValues(new Uint32Array(10));
+  $('newPass').value = Array.from(r, (n) => chars[n % chars.length]).join('');
+};
+
+$('btnCreate').onclick = async () => {
+  const username = $('newUser').value.trim().toLowerCase();
+  const password = $('newPass').value;
+  const days = parseInt($('newDays').value, 10);
+  $('result').classList.add('hidden');
+  $('btnCreate').disabled = true;
+  try {
+    const d = await api('admin_create', { username, password, days });
+    say($('createMsg'), 'User berhasil dibuat.', true);
+    const exp = d.expires ? 'sampai ' + fmtDate(d.expires) : 'permanen';
+    $('result').innerHTML = 'Username: <b></b><br>Password: <b></b><br>Aktif: <b>' + exp + '</b>';
+    const bs = $('result').querySelectorAll('b');
+    bs[0].textContent = username; bs[1].textContent = password;
+    $('result').classList.remove('hidden');
+    $('result').dataset.copy = 'Username: ' + username + '\nPassword: ' + password + '\nAktif: ' + exp;
+    $('newUser').value = ''; $('newPass').value = '';
+    loadUsers();
+  } catch (e) { say($('createMsg'), e.message, false); }
+  $('btnCreate').disabled = false;
+};
+
+$('result').onclick = () => {
+  const t = $('result').dataset.copy;
+  if (t && navigator.clipboard) navigator.clipboard.writeText(t).then(() => say($('createMsg'), 'Tersalin ke clipboard.', true));
+};
+
+/* ---------- daftar user ---------- */
+async function loadUsers() {
+  const box = $('userList');
+  try {
+    const d = await api('admin_list');
+    box.innerHTML = '';
+    if (!d.users.length) { box.innerHTML = '<div class="empty">Belum ada user VIP. Buat yang pertama di atas.</div>'; return; }
+    d.users.forEach((u) => {
+      const expired = u.expires && Date.now() > u.expires;
+      const row = document.createElement('div'); row.className = 'user';
+      const info = document.createElement('div'); info.className = 'info';
+      const name = document.createElement('div'); name.className = 'name'; name.textContent = u.username;
+      const meta = document.createElement('div'); meta.className = 'meta';
+      const tag = document.createElement('span'); tag.className = 'tag ' + (expired ? 'off' : 'on'); tag.textContent = expired ? 'Kedaluwarsa' : 'Aktif';
+      meta.append(tag, ' ' + (u.expires ? 'sampai ' + fmtDate(u.expires) : 'permanen') + ' · dibuat ' + fmtDate(u.created));
+      info.append(name, meta);
+      const del = document.createElement('button'); del.className = 'danger'; del.textContent = 'Hapus';
+      del.onclick = async () => {
+        if (!confirm('Hapus user "' + u.username + '"?')) return;
+        try { await api('admin_delete', { username: u.username }); loadUsers(); }
+        catch (e) { alert(e.message); }
+      };
+      row.append(info, del);
+      box.append(row);
+    });
+  } catch (e) { box.innerHTML = '<div class="empty">' + e.message + '</div>'; }
+}
+$('btnRefresh').onclick = loadUsers;
+
+/* lanjut otomatis jika admin key masih tersimpan di tab ini */
+try {
+  const k = sessionStorage.getItem('vv_key');
+  if (k) { $('adminKey').value = k; $('btnLogin').click(); }
+} catch (e) {}
+</script>
+</body>
+</html>
