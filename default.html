@@ -170,13 +170,7 @@ const TOKEN_KEY='vv_vip_token';
 function getToken(){try{return localStorage.getItem(TOKEN_KEY)||'';}catch(e){return '';}}
 function setToken(t){try{t?localStorage.setItem(TOKEN_KEY,t):localStorage.removeItem(TOKEN_KEY);}catch(e){}}
 
-async function vipApi(action,data){
-  const res=await fetch('/api/vip',{
-    method:'POST',headers:{'Content-Type':'application/json'},
-    body:JSON.stringify(Object.assign({action},data||{}))
-  });
-  return res.json();
-}
+async function callVipApi(payload){const r=await fetch('/api/vip',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});let d;try{d=await r.json()}catch{throw new Error('Respons server tidak valid.')}if(!r.ok)throw new Error(d.error||'Permintaan gagal.');return d}
 
 function showVipPage(){
   document.getElementById('homePage').style.display='none';
