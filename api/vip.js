@@ -1,157 +1,125 @@
-/*
- * api/vip.js  -  Backend VIP (Vercel Serverless + Supabase)
- *
- * Environment Variables (Vercel -> Settings -> Environment Variables):
- *   SUPABASE_URL          https://xxxx.supabase.co
- *   SUPABASE_SERVICE_KEY  service_role key (JANGAN pernah ditaruh di HTML / repo)
- *   VIP_ADMIN_KEY         kata sandi admin VIP (buat panjang & acak)
- *
- * Semua request: POST /api/vip  dengan body JSON { action, ... }
- *   Publik : login, session, logout
- *   Admin  : admin_list, admin_create, admin_delete   (header Authorization: Bearer <VIP_ADMIN_KEY>)
- */
-import crypto from 'node:crypto';
+const { Redis } = require('@upstash/redis');
+const crypto = require('crypto');
 
-const { SUPABASE_URL, SUPABASE_SERVICE_KEY, VIP_ADMIN_KEY } = process.env;
-const SESSION_DAYS = 30;
+const redis = new Redis({
+  url: process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL,
+  token: process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN,
+  automaticDeserialization: false,
+});
 
-const scrypt = (pw, salt) =>
-  new Promise((ok, no) => crypto.scrypt(pw, salt, 32, (e, k) => (e ? no(e) : ok(k))));
-const sha256 = (s) => crypto.createHash('sha256').update(String(s)).digest('hex');
-const safeEq = (a, b) => {
-  const x = Buffer.from(a), y = Buffer.from(b);
-  return x.length === y.length && crypto.timingSafeEqual(x, y);
-};
-const normName = (s) => String(s || '').trim().toLowerCase();
-const validName = (s) => /^[a-z0-9_.-]{3,24}$/.test(s);
+const USERS = 'vip:users';
+const SESSION_MAX = 24 * 60 * 60; // detik
 
-async function sb(path, { method = 'GET', body, prefer } = {}) {
-  const r = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, {
-    method,
-    headers: {
-      apikey: SUPABASE_SERVICE_KEY,
-      Authorization: `Bearer ${SUPABASE_SERVICE_KEY}`,
-      'Content-Type': 'application/json',
-      ...(prefer ? { Prefer: prefer } : {})
-    },
-    body: body ? JSON.stringify(body) : undefined
-  });
-  if (!r.ok) throw new Error(await r.text());
-  const t = await r.text();
-  return t ? JSON.parse(t) : null;
+function adminOk(input) {
+  const real = process.env.ADMIN_PASSWORD || '';
+  if (!real || typeof input !== 'string') return false;
+  const a = crypto.createHash('sha256').update(input).digest();
+  const b = crypto.createHash('sha256').update(real).digest();
+  return crypto.timingSafeEqual(a, b);
 }
 
-async function findUser(name) {
-  if (!validName(name)) return null;
-  const rows = await sb(`vip_users?username=eq.${encodeURIComponent(name)}&select=*`);
-  const u = rows && rows[0];
-  if (!u) return null;
-  if (u.expires_at && Date.now() > Date.parse(u.expires_at)) return null;
-  return u;
+function hashPw(pw, salt) {
+  return crypto.scryptSync(pw, salt, 32).toString('hex');
 }
 
-export default async function handler(req, res) {
+function cleanName(n) {
+  return String(n || '').trim().toLowerCase();
+}
+
+module.exports = async (req, res) => {
   res.setHeader('Cache-Control', 'no-store');
-  if (req.method !== 'POST') return res.status(405).json({ ok: false, error: 'Method not allowed' });
-  if (!SUPABASE_URL || !SUPABASE_SERVICE_KEY || !VIP_ADMIN_KEY)
-    return res.status(500).json({ ok: false, error: 'Environment variable belum lengkap.' });
+  if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
-  let b = req.body || {};
-  if (typeof b === 'string') { try { b = JSON.parse(b); } catch (e) { b = {}; } }
+  const body = req.body || {};
+  const action = body.action;
 
   try {
-    /* ---------- PUBLIK ---------- */
-    if (b.action === 'login') {
-      const name = normName(b.username);
-      const u = await findUser(name);
-      const salt = u ? Buffer.from(u.salt, 'base64') : Buffer.from('dummy-salt-value!');
-      const hash = (await scrypt(String(b.password || ''), salt)).toString('base64');
-      if (!u || !safeEq(hash, u.hash))
-        return res.status(401).json({ ok: false, error: 'Username atau password salah.' });
+    // ---------- LOGIN ----------
+    if (action === 'login') {
+      const ip = (req.headers['x-forwarded-for'] || 'x').split(',')[0].trim();
+      const rlKey = 'vip:rl:' + ip;
+      const tries = await redis.incr(rlKey);
+      if (tries === 1) await redis.expire(rlKey, 600);
+      if (tries > 10) return res.status(429).json({ error: 'Terlalu banyak percobaan. Coba lagi 10 menit lagi.' });
+
+      const username = cleanName(body.username);
+      const password = String(body.password || '');
+      const raw = username ? await redis.hget(USERS, username) : null;
+      const bad = () => res.status(401).json({ error: 'Username atau password salah.' });
+      if (!raw) return bad();
+
+      const u = JSON.parse(raw);
+      const test = Buffer.from(hashPw(password, u.salt), 'hex');
+      const real = Buffer.from(u.hash, 'hex');
+      if (test.length !== real.length || !crypto.timingSafeEqual(test, real)) return bad();
+
+      if (u.expiresAt && Date.now() > u.expiresAt) {
+        return res.status(403).json({ error: 'Masa aktif VIP sudah habis.' });
+      }
 
       const token = crypto.randomBytes(32).toString('hex');
-      await sb('vip_sessions', {
-        method: 'POST',
-        prefer: 'return=minimal',
-        body: {
-          token_hash: sha256(token),
-          username: name,
-          expires_at: new Date(Date.now() + SESSION_DAYS * 864e5).toISOString()
-        }
-      });
-      return res.json({ ok: true, token, username: name });
+      let ttl = SESSION_MAX;
+      if (u.expiresAt) ttl = Math.max(60, Math.min(SESSION_MAX, Math.floor((u.expiresAt - Date.now()) / 1000)));
+      await redis.set('vip:sess:' + token, JSON.stringify({ username: u.username }), { ex: ttl });
+      await redis.del(rlKey);
+      return res.json({ token, username: u.username, expiresAt: u.expiresAt || Date.now() + SESSION_MAX * 1000 });
     }
 
-    if (b.action === 'session') {
-      const rows = await sb(`vip_sessions?token_hash=eq.${sha256(b.token)}&select=username,expires_at`);
-      const s = rows && rows[0];
-      if (!s || Date.now() > Date.parse(s.expires_at)) return res.status(401).json({ ok: false });
-      const u = await findUser(s.username);          // akun dihapus / kedaluwarsa -> sesi ditolak
-      if (!u) return res.status(401).json({ ok: false });
-      return res.json({ ok: true, username: s.username });
+    // ---------- CEK SESI ----------
+    if (action === 'session') {
+      const token = String(body.token || '');
+      if (!/^[a-f0-9]{64}$/.test(token)) return res.json({ valid: false });
+      const s = await redis.get('vip:sess:' + token);
+      if (!s) return res.json({ valid: false });
+      const { username } = JSON.parse(s);
+      const raw = await redis.hget(USERS, cleanName(username));
+      if (!raw) return res.json({ valid: false });
+      const u = JSON.parse(raw);
+      if (u.expiresAt && Date.now() > u.expiresAt) return res.json({ valid: false });
+      return res.json({ valid: true, username: u.username, expiresAt: u.expiresAt || Date.now() + SESSION_MAX * 1000 });
     }
 
-    if (b.action === 'logout') {
-      if (b.token) await sb(`vip_sessions?token_hash=eq.${sha256(b.token)}`, { method: 'DELETE' });
-      return res.json({ ok: true });
-    }
+    // ---------- ADMIN ----------
+    if (action === 'admin_list' || action === 'admin_add' || action === 'admin_delete') {
+      if (!adminOk(body.adminPassword)) return res.status(401).json({ error: 'Password admin salah' });
 
-    /* ---------- ADMIN ---------- */
-    if (String(b.action).startsWith('admin_')) {
-      const auth = req.headers.authorization || '';
-      const key = auth.startsWith('Bearer ') ? auth.slice(7) : '';
-      if (!safeEq(sha256(key), sha256(VIP_ADMIN_KEY)))
-        return res.status(401).json({ ok: false, error: 'Admin key salah.' });
-
-      if (b.action === 'admin_list') {
-        const rows = await sb('vip_users?select=username,created_at,expires_at&order=created_at.desc');
-        return res.json({
-          ok: true,
-          users: rows.map((r) => ({
-            username: r.username,
-            created: Date.parse(r.created_at),
-            expires: r.expires_at ? Date.parse(r.expires_at) : 0
-          }))
+      if (action === 'admin_list') {
+        const all = (await redis.hgetall(USERS)) || {};
+        const users = Object.values(all).map((r) => {
+          const u = JSON.parse(r);
+          return { username: u.username, expiresAt: u.expiresAt };
         });
+        return res.json({ users });
       }
 
-      if (b.action === 'admin_create') {
-        const name = normName(b.username);
-        const password = String(b.password || '');
-        const days = Math.max(0, parseInt(b.days, 10) || 0);
-        if (!validName(name))
-          return res.status(400).json({ ok: false, error: 'Username 3-24 karakter: huruf kecil, angka, _ . -' });
-        if (password.length < 6)
-          return res.status(400).json({ ok: false, error: 'Password minimal 6 karakter.' });
-
-        const salt = crypto.randomBytes(16);
-        const expires = days ? Date.now() + days * 864e5 : 0;
-        await sb('vip_users?on_conflict=username', {      // username sudah ada -> password & masa aktif ditimpa
-          method: 'POST',
-          prefer: 'resolution=merge-duplicates,return=minimal',
-          body: {
-            username: name,
-            salt: salt.toString('base64'),
-            hash: (await scrypt(password, salt)).toString('base64'),
-            created_at: new Date().toISOString(),
-            expires_at: expires ? new Date(expires).toISOString() : null
-          }
-        });
-        await sb(`vip_sessions?username=eq.${encodeURIComponent(name)}`, { method: 'DELETE' }); // paksa login ulang
-        return res.json({ ok: true, username: name, expires });
+      const username = cleanName(body.username);
+      if (!/^[a-z0-9_]{3,32}$/.test(username)) {
+        return res.status(400).json({ error: 'Username 3-32 karakter: huruf kecil, angka, underscore.' });
       }
 
-      if (b.action === 'admin_delete') {
-        const name = normName(b.username);
-        if (!validName(name)) return res.status(400).json({ ok: false, error: 'Username tidak valid.' });
-        await sb(`vip_users?username=eq.${encodeURIComponent(name)}`, { method: 'DELETE' });
+      if (action === 'admin_delete') {
+        await redis.hdel(USERS, username);
         return res.json({ ok: true });
       }
+
+      const password = String(body.password || '');
+      const days = Number(body.days);
+      if (password.length < 6) return res.status(400).json({ error: 'Password minimal 6 karakter.' });
+      if (!(days > 0 && days <= 3650)) return res.status(400).json({ error: 'Durasi harus 1-3650 hari.' });
+      const salt = crypto.randomBytes(16).toString('hex');
+      const user = {
+        username,
+        salt,
+        hash: hashPw(password, salt),
+        expiresAt: Date.now() + days * 86400000,
+      };
+      await redis.hset(USERS, { [username]: JSON.stringify(user) });
+      return res.json({ ok: true, expiresAt: user.expiresAt });
     }
 
-    return res.status(400).json({ ok: false, error: 'Action tidak dikenal.' });
+    return res.status(400).json({ error: 'Action tidak dikenal' });
   } catch (e) {
     console.error(e);
-    return res.status(500).json({ ok: false, error: 'Server error.' });
+    return res.status(500).json({ error: 'Server error: ' + e.message });
   }
-}
+};
