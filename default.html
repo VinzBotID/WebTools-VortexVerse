@@ -166,6 +166,79 @@ function updateSensValue(id){
   document.getElementById(id+'Value').textContent=slider.value;
   document.getElementById('sensNote').textContent='Nilai sensitivitas sudah disesuaikan. Ini referensi pengaturan; hasil dapat berbeda di tiap perangkat.';
 }
+const TOKEN_KEY='vv_vip_token';
+function getToken(){try{return localStorage.getItem(TOKEN_KEY)||'';}catch(e){return '';}}
+function setToken(t){try{t?localStorage.setItem(TOKEN_KEY,t):localStorage.removeItem(TOKEN_KEY);}catch(e){}}
+
+async function vipApi(action,data){
+  const res=await fetch('/api/vip',{
+    method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify(Object.assign({action},data||{}))
+  });
+  return res.json();
+}
+
+function showVipPage(){
+  document.getElementById('homePage').style.display='none';
+  document.getElementById('vipPage').style.display='block';
+  window.scrollTo(0,0);
+}
+function showHomePage(){
+  document.getElementById('vipPage').style.display='none';
+  document.getElementById('homePage').style.display='block';
+  window.scrollTo(0,0);
+}
+
+function openVipLogin(){
+  if(getToken()){checkSession(true);return;}
+  document.getElementById('vipModal').classList.add('show');
+  document.getElementById('vipError').style.display='none';
+  document.getElementById('vipUsername').focus();
+}
+function closeVipLogin(){document.getElementById('vipModal').classList.remove('show');}
+
+async function loginVip(event){
+  event.preventDefault();
+  const err=document.getElementById('vipError');
+  const btn=event.target.querySelector('.vip-submit');
+  err.style.display='none';btn.disabled=true;
+  try{
+    const data=await vipApi('login',{
+      username:document.getElementById('vipUsername').value.trim(),
+      password:document.getElementById('vipPassword').value
+    });
+    if(data.ok){setToken(data.token);closeVipLogin();showVipPage();}
+    else{err.textContent=data.error||'Username atau password salah.';err.style.display='block';}
+  }catch(e){
+    err.textContent='Tidak bisa terhubung ke server. Coba lagi.';
+    err.style.display='block';
+  }
+  btn.disabled=false;
+}
+
+async function checkSession(openModalIfInvalid){
+  const token=getToken();
+  if(!token)return;
+  try{
+    const data=await vipApi('session',{token});
+    if(data.ok){showVipPage();return;}
+    setToken('');
+    if(openModalIfInvalid)openVipLogin();
+  }catch(e){
+    if(openModalIfInvalid)showSettingXToast('Tidak bisa terhubung ke server.');
+  }
+}
+
+function logoutVip(){
+  const token=getToken();
+  setToken('');
+  if(token)vipApi('logout',{token}).catch(()=>{});
+  document.getElementById('vipUsername').value='';
+  document.getElementById('vipPassword').value='';
+  showHomePage();
+}
+
+checkSession(false);
 </script>
 </body>
 </html>
