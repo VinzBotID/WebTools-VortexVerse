@@ -24,6 +24,7 @@ button:disabled{opacity:.6;cursor:wait}
 button.full{width:100%}
 button.ghost{background:#29204a;border-color:var(--line)}
 button.del{background:#5a1f33;border-color:#ff4d8399;padding:8px 12px;font-size:12px}
+button.edit{background:#29204a;border-color:#b17cff;padding:8px 12px;font-size:12px}
 .msg{min-height:18px;margin:10px 0 0;font-size:12px;text-align:center}
 .msg.err{color:#ff718a}.msg.ok{color:#19d6a0}
 .preview{display:none;margin:0 0 12px;max-height:220px;width:auto;max-width:100%;border-radius:12px;border:1px solid var(--line)}
@@ -35,16 +36,24 @@ button.del{background:#5a1f33;border-color:#ff4d8399;padding:8px 12px;font-size:
 .row .t{flex:1;min-width:0;font-size:13px;font-weight:800;overflow-wrap:anywhere}
 .row .t small{display:block;margin-top:4px;color:var(--muted);font-weight:600;font-size:10px;overflow-wrap:anywhere}
 .empty{padding:20px;text-align:center;color:var(--muted);font-size:13px}
+.actions{display:flex;flex-direction:column;gap:6px;flex:none}
+@media(max-width:420px){
+ .row{gap:8px}
+ .row img{width:48px;height:64px}
+ .actions button{padding:7px 8px;font-size:11px}
+}
 </style>
 </head>
 <body>
 <div class="wrap">
   <div class="top">
-    <div><h1>ADMIN TESTIMONI</h1><p class="sub">Vortex Verse · kelola foto & judul testi</p></div>
+    <div>
+      <h1>ADMIN TESTIMONI</h1>
+      <p class="sub">Vortex Verse · kelola foto & judul testi</p>
+    </div>
     <button class="ghost" id="logoutBtn" type="button" style="display:none">KELUAR</button>
   </div>
 
-  <!-- LOGIN -->
   <section class="card" id="loginCard">
     <h2>🔐 Login Admin</h2>
     <form id="loginForm">
@@ -55,7 +64,6 @@ button.del{background:#5a1f33;border-color:#ff4d8399;padding:8px 12px;font-size:
     <div class="msg" id="loginMsg"></div>
   </section>
 
-  <!-- PANEL -->
   <div id="panel">
     <section class="card">
       <h2>➕ Tambah Testimoni</h2>
@@ -70,6 +78,24 @@ button.del{background:#5a1f33;border-color:#ff4d8399;padding:8px 12px;font-size:
       <div class="msg" id="addMsg"></div>
     </section>
 
+    <section class="card" id="editCard" style="display:none">
+      <h2>✏️ Edit Testimoni</h2>
+      <form id="editForm">
+        <input id="editId" type="hidden">
+
+        <label for="editFoto">URL Foto Baru</label>
+        <input id="editFoto" type="url" placeholder="https://contoh.com/foto.png" required>
+        <img id="editPreview" class="preview" alt="Preview foto baru">
+
+        <label for="editJudul">Judul Testi Baru</label>
+        <input id="editJudul" type="text" maxlength="120" required>
+
+        <button class="full" type="submit" id="saveEditBtn">SIMPAN PERUBAHAN</button>
+        <button class="full ghost" type="button" id="cancelEditBtn" style="margin-top:8px">BATAL</button>
+      </form>
+      <div class="msg" id="editMsg"></div>
+    </section>
+
     <section class="card">
       <h2>📋 Daftar Testimoni (<span id="count">0</span>)</h2>
       <div class="list" id="list"></div>
@@ -78,106 +104,297 @@ button.del{background:#5a1f33;border-color:#ff4d8399;padding:8px 12px;font-size:
 </div>
 
 <script>
-const $=id=>document.getElementById(id);
-const KEY='vv_admin_pw';
-let password=sessionStorage.getItem(KEY)||'';
+const $ = id => document.getElementById(id);
+const KEY = 'vv_admin_pw';
+let password = sessionStorage.getItem(KEY) || '';
 
-async function api(method,body){
-  const r=await fetch('/api/testi',{
+async function api(method, body) {
+  const r = await fetch('/api/testi', {
     method,
-    headers:{'Content-Type':'application/json','x-admin-password':password},
-    body:body?JSON.stringify(body):undefined
+    headers: {
+      'Content-Type': 'application/json',
+      'x-admin-password': password
+    },
+    body: body ? JSON.stringify(body) : undefined,
+    cache: 'no-store'
   });
-  const d=await r.json().catch(()=>({}));
-  if(!r.ok||d.ok===false)throw new Error(d.error||'Terjadi kesalahan.');
+
+  const d = await r.json().catch(() => ({}));
+
+  if (!r.ok || d.ok === false) {
+    throw new Error(d.error || 'Terjadi kesalahan.');
+  }
+
   return d;
 }
-function setMsg(el,text,type){el.textContent=text||'';el.className='msg'+(type?' '+type:'')}
 
-function showPanel(){
-  $('loginCard').style.display='none';
-  $('panel').style.display='block';
-  $('logoutBtn').style.display='inline-block';
+function setMsg(el, text, type) {
+  el.textContent = text || '';
+  el.className = 'msg' + (type ? ' ' + type : '');
+}
+
+function showPanel() {
+  $('loginCard').style.display = 'none';
+  $('panel').style.display = 'block';
+  $('logoutBtn').style.display = 'inline-block';
   loadList();
 }
-function showLogin(){
-  $('loginCard').style.display='block';
-  $('panel').style.display='none';
-  $('logoutBtn').style.display='none';
+
+function showLogin() {
+  $('loginCard').style.display = 'block';
+  $('panel').style.display = 'none';
+  $('logoutBtn').style.display = 'none';
+  closeEdit();
 }
 
-async function loadList(){
-  try{
-    const r=await fetch('/api/testi',{cache:'no-store'});
-    const d=await r.json();
-    renderList(d.items||[]);
-  }catch(e){setMsg($('addMsg'),'Gagal memuat daftar.','err')}
+async function loadList() {
+  try {
+    const r = await fetch('/api/testi', { cache: 'no-store' });
+    const d = await r.json();
+
+    if (!r.ok || d.ok === false) {
+      throw new Error(d.error || 'Gagal memuat daftar.');
+    }
+
+    renderList(d.items || []);
+  } catch (e) {
+    setMsg($('addMsg'), e.message || 'Gagal memuat daftar.', 'err');
+  }
 }
-function renderList(items){
-  $('count').textContent=items.length;
-  const box=$('list');box.innerHTML='';
-  if(!items.length){box.innerHTML='<div class="empty">Belum ada testimoni.</div>';return}
-  items.forEach(t=>{
-    const row=document.createElement('div');row.className='row';
-    const img=document.createElement('img');img.src=t.foto;img.alt='';img.loading='lazy';
-    img.onerror=function(){this.onerror=null;this.src='https://placehold.co/112x148/19172b/b58aff?text=X'};
-    const info=document.createElement('div');info.className='t';
-    info.textContent=t.judul;
-    const small=document.createElement('small');small.textContent=t.foto;info.appendChild(small);
-    const del=document.createElement('button');del.type='button';del.className='del';del.textContent='HAPUS';
-    del.onclick=async()=>{
-      if(!confirm('Hapus testimoni "'+t.judul+'"?'))return;
-      del.disabled=true;
-      try{const d=await api('DELETE',{id:t.id});renderList(d.items);setMsg($('addMsg'),'Testimoni dihapus.','ok')}
-      catch(e){setMsg($('addMsg'),e.message,'err');del.disabled=false}
+
+function renderList(items) {
+  $('count').textContent = items.length;
+
+  const box = $('list');
+  box.innerHTML = '';
+
+  if (!items.length) {
+    box.innerHTML = '<div class="empty">Belum ada testimoni.</div>';
+    return;
+  }
+
+  items.forEach(t => {
+    const row = document.createElement('div');
+    row.className = 'row';
+
+    const img = document.createElement('img');
+    img.src = t.foto;
+    img.alt = '';
+    img.loading = 'lazy';
+    img.onerror = function() {
+      this.onerror = null;
+      this.src = 'https://placehold.co/112x148/19172b/b58aff?text=X';
     };
-    row.append(img,info,del);
+
+    const info = document.createElement('div');
+    info.className = 't';
+    info.textContent = t.judul;
+
+    const small = document.createElement('small');
+    small.textContent = t.foto;
+    info.appendChild(small);
+
+    const actions = document.createElement('div');
+    actions.className = 'actions';
+
+    const edit = document.createElement('button');
+    edit.type = 'button';
+    edit.className = 'edit';
+    edit.textContent = 'EDIT';
+    edit.onclick = () => openEdit(t);
+
+    const del = document.createElement('button');
+    del.type = 'button';
+    del.className = 'del';
+    del.textContent = 'HAPUS';
+
+    del.onclick = async () => {
+      if (!confirm('Hapus testimoni "' + t.judul + '"?')) return;
+
+      del.disabled = true;
+
+      try {
+        const d = await api('DELETE', { id: t.id });
+        renderList(d.items);
+        setMsg($('addMsg'), 'Testimoni dihapus.', 'ok');
+
+        if ($('editId').value === t.id) {
+          closeEdit();
+        }
+      } catch (e) {
+        setMsg($('addMsg'), e.message, 'err');
+        del.disabled = false;
+      }
+    };
+
+    actions.append(edit, del);
+    row.append(img, info, actions);
     box.appendChild(row);
   });
 }
 
-$('loginForm').addEventListener('submit',async e=>{
+// Membuka form edit dengan data testimoni yang dipilih
+function openEdit(t) {
+  $('editId').value = t.id;
+  $('editFoto').value = t.foto;
+  $('editJudul').value = t.judul;
+  $('editPreview').src = t.foto;
+  $('editPreview').style.display = 'block';
+  $('editCard').style.display = 'block';
+
+  setMsg($('editMsg'), '');
+  $('editCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// Menutup dan mengosongkan form edit
+function closeEdit() {
+  $('editForm').reset();
+  $('editId').value = '';
+  $('editPreview').removeAttribute('src');
+  $('editPreview').style.display = 'none';
+  $('editCard').style.display = 'none';
+  setMsg($('editMsg'), '');
+}
+
+$('loginForm').addEventListener('submit', async e => {
   e.preventDefault();
-  password=$('pw').value;
-  $('loginBtn').disabled=true;setMsg($('loginMsg'),'Memeriksa...');
-  try{
-    await api('POST',{action:'check'});
-    sessionStorage.setItem(KEY,password);
-    setMsg($('loginMsg'),'');
+
+  password = $('pw').value;
+  $('loginBtn').disabled = true;
+  setMsg($('loginMsg'), 'Memeriksa...');
+
+  try {
+    await api('POST', { action: 'check' });
+    sessionStorage.setItem(KEY, password);
+    setMsg($('loginMsg'), '');
     showPanel();
-  }catch(err){setMsg($('loginMsg'),err.message,'err')}
-  finally{$('loginBtn').disabled=false}
+  } catch (err) {
+    setMsg($('loginMsg'), err.message, 'err');
+  } finally {
+    $('loginBtn').disabled = false;
+  }
 });
 
-$('foto').addEventListener('input',()=>{
-  const v=$('foto').value.trim(),p=$('preview');
-  if(/^https?:\/\//i.test(v)){p.src=v;p.style.display='block'}else p.style.display='none';
-});
-$('preview').addEventListener('error',()=>{$('preview').style.display='none'});
+// Preview foto untuk form tambah
+$('foto').addEventListener('input', () => {
+  const v = $('foto').value.trim();
+  const p = $('preview');
 
-$('addForm').addEventListener('submit',async e=>{
+  if (/^https?:\/\//i.test(v)) {
+    p.src = v;
+    p.style.display = 'block';
+  } else {
+    p.style.display = 'none';
+  }
+});
+
+$('preview').addEventListener('error', () => {
+  $('preview').style.display = 'none';
+});
+
+// Tambah testimoni
+$('addForm').addEventListener('submit', async e => {
   e.preventDefault();
-  $('addBtn').disabled=true;setMsg($('addMsg'),'Menyimpan...');
-  try{
-    const d=await api('POST',{foto:$('foto').value.trim(),judul:$('judul').value.trim()});
+
+  $('addBtn').disabled = true;
+  setMsg($('addMsg'), 'Menyimpan...');
+
+  try {
+    const d = await api('POST', {
+      foto: $('foto').value.trim(),
+      judul: $('judul').value.trim()
+    });
+
     renderList(d.items);
-    $('foto').value='';$('judul').value='';$('preview').style.display='none';
-    setMsg($('addMsg'),'Testimoni berhasil ditambahkan!','ok');
-  }catch(err){
-    setMsg($('addMsg'),err.message,'err');
-    if(/password/i.test(err.message)){sessionStorage.removeItem(KEY);showLogin()}
-  }finally{$('addBtn').disabled=false}
+    $('addForm').reset();
+    $('preview').removeAttribute('src');
+    $('preview').style.display = 'none';
+
+    setMsg($('addMsg'), 'Testimoni berhasil ditambahkan!', 'ok');
+  } catch (err) {
+    setMsg($('addMsg'), err.message, 'err');
+
+    if (/password admin salah/i.test(err.message)) {
+      sessionStorage.removeItem(KEY);
+      password = '';
+      showLogin();
+    }
+  } finally {
+    $('addBtn').disabled = false;
+  }
 });
 
-$('logoutBtn').addEventListener('click',()=>{
-  sessionStorage.removeItem(KEY);password='';$('pw').value='';showLogin();
+// Preview foto untuk form edit
+$('editFoto').addEventListener('input', () => {
+  const v = $('editFoto').value.trim();
+  const p = $('editPreview');
+
+  if (/^https?:\/\//i.test(v)) {
+    p.src = v;
+    p.style.display = 'block';
+  } else {
+    p.style.display = 'none';
+  }
 });
 
-// auto-login kalau password masih tersimpan di sesi
-(async()=>{
-  if(!password)return;
-  try{await api('POST',{action:'check'});showPanel()}
-  catch{sessionStorage.removeItem(KEY);password=''}
+$('editPreview').addEventListener('error', () => {
+  $('editPreview').style.display = 'none';
+});
+
+// Simpan perubahan testimoni
+$('editForm').addEventListener('submit', async e => {
+  e.preventDefault();
+
+  $('saveEditBtn').disabled = true;
+  $('cancelEditBtn').disabled = true;
+  setMsg($('editMsg'), 'Menyimpan perubahan...');
+
+  try {
+    const d = await api('POST', {
+      action: 'edit',
+      id: $('editId').value,
+      foto: $('editFoto').value.trim(),
+      judul: $('editJudul').value.trim()
+    });
+
+    renderList(d.items);
+    closeEdit();
+    setMsg($('addMsg'), 'Testimoni berhasil diperbarui!', 'ok');
+  } catch (err) {
+    setMsg($('editMsg'), err.message, 'err');
+
+    if (/password admin salah/i.test(err.message)) {
+      sessionStorage.removeItem(KEY);
+      password = '';
+      showLogin();
+    }
+  } finally {
+    $('saveEditBtn').disabled = false;
+    $('cancelEditBtn').disabled = false;
+  }
+});
+
+$('cancelEditBtn').addEventListener('click', closeEdit);
+
+$('logoutBtn').addEventListener('click', () => {
+  sessionStorage.removeItem(KEY);
+  password = '';
+  $('pw').value = '';
+  closeEdit();
+  showLogin();
+});
+
+// Login otomatis selama sesi masih menyimpan password
+(async () => {
+  if (!password) return;
+
+  try {
+    await api('POST', { action: 'check' });
+    showPanel();
+  } catch {
+    sessionStorage.removeItem(KEY);
+    password = '';
+  }
 })();
 </script>
 </body>
