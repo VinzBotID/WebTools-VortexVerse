@@ -1,1 +1,184 @@
 
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#090812">
+<title>ADMIN TESTI - VORTEX VERSE</title>
+<style>
+:root{--bg:#090812;--text:#f7f4ff;--muted:#a6a1bb;--line:rgba(164,108,255,.45)}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(ellipse at 20% -10%,#48205a66,transparent 38%),var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;min-height:100vh}
+.wrap{max-width:760px;margin:auto;padding:20px 15px 40px}
+h1{margin:0 0 4px;font-size:24px;font-weight:950;background:linear-gradient(90deg,#ff6c9c,#b58aff 65%,#70d8ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{color:var(--muted);font-size:12px;margin:0 0 18px}
+.card{margin-top:14px;padding:18px 15px;border:1px solid var(--line);border-radius:20px;background:linear-gradient(145deg,rgba(28,25,47,.96),rgba(14,22,37,.97))}
+.card h2{margin:0 0 12px;font-size:16px;font-weight:900}
+label{display:block;margin:0 0 6px;color:var(--muted);font-size:12px;font-weight:700}
+input{width:100%;margin-bottom:12px;padding:13px;border:1px solid var(--line);border-radius:11px;outline:none;background:#0c0b18;color:#fff;font-size:14px}
+input:focus{border-color:#b17cff}
+button{cursor:pointer;border:1px solid #b17cff88;border-radius:12px;padding:12px 16px;background:linear-gradient(100deg,#6d3bba,#3b4a9b);color:#fff;font-size:14px;font-weight:850}
+button:disabled{opacity:.6;cursor:wait}
+button.full{width:100%}
+button.ghost{background:#29204a;border-color:var(--line)}
+button.del{background:#5a1f33;border-color:#ff4d8399;padding:8px 12px;font-size:12px}
+.msg{min-height:18px;margin:10px 0 0;font-size:12px;text-align:center}
+.msg.err{color:#ff718a}.msg.ok{color:#19d6a0}
+.preview{display:none;margin:0 0 12px;max-height:220px;width:auto;max-width:100%;border-radius:12px;border:1px solid var(--line)}
+.top{display:flex;justify-content:space-between;align-items:center;gap:10px}
+#panel{display:none}
+.list{display:grid;gap:10px;margin-top:6px}
+.row{display:flex;align-items:center;gap:12px;padding:10px;border:1px solid var(--line);border-radius:14px;background:#0c0b1888}
+.row img{width:56px;height:74px;flex:none;object-fit:cover;border-radius:9px;background:#111020}
+.row .t{flex:1;min-width:0;font-size:13px;font-weight:800;overflow-wrap:anywhere}
+.row .t small{display:block;margin-top:4px;color:var(--muted);font-weight:600;font-size:10px;overflow-wrap:anywhere}
+.empty{padding:20px;text-align:center;color:var(--muted);font-size:13px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div><h1>ADMIN TESTIMONI</h1><p class="sub">Vortex Verse · kelola foto & judul testi</p></div>
+    <button class="ghost" id="logoutBtn" type="button" style="display:none">KELUAR</button>
+  </div>
+
+  <!-- LOGIN -->
+  <section class="card" id="loginCard">
+    <h2>🔐 Login Admin</h2>
+    <form id="loginForm">
+      <label for="pw">Password admin</label>
+      <input id="pw" type="password" autocomplete="current-password" required>
+      <button class="full" type="submit" id="loginBtn">MASUK</button>
+    </form>
+    <div class="msg" id="loginMsg"></div>
+  </section>
+
+  <!-- PANEL -->
+  <div id="panel">
+    <section class="card">
+      <h2>➕ Tambah Testimoni</h2>
+      <form id="addForm">
+        <label for="foto">URL Foto</label>
+        <input id="foto" type="url" placeholder="https://files.catbox.moe/xxxxx.png" required>
+        <img id="preview" class="preview" alt="Preview">
+        <label for="judul">Judul Testi</label>
+        <input id="judul" type="text" maxlength="120" placeholder="Testi dari Budi" required>
+        <button class="full" type="submit" id="addBtn">TAMBAH TESTI</button>
+      </form>
+      <div class="msg" id="addMsg"></div>
+    </section>
+
+    <section class="card">
+      <h2>📋 Daftar Testimoni (<span id="count">0</span>)</h2>
+      <div class="list" id="list"></div>
+    </section>
+  </div>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+const KEY='vv_admin_pw';
+let password=sessionStorage.getItem(KEY)||'';
+
+async function api(method,body){
+  const r=await fetch('/api/testi',{
+    method,
+    headers:{'Content-Type':'application/json','x-admin-password':password},
+    body:body?JSON.stringify(body):undefined
+  });
+  const d=await r.json().catch(()=>({}));
+  if(!r.ok||d.ok===false)throw new Error(d.error||'Terjadi kesalahan.');
+  return d;
+}
+function setMsg(el,text,type){el.textContent=text||'';el.className='msg'+(type?' '+type:'')}
+
+function showPanel(){
+  $('loginCard').style.display='none';
+  $('panel').style.display='block';
+  $('logoutBtn').style.display='inline-block';
+  loadList();
+}
+function showLogin(){
+  $('loginCard').style.display='block';
+  $('panel').style.display='none';
+  $('logoutBtn').style.display='none';
+}
+
+async function loadList(){
+  try{
+    const r=await fetch('/api/testi',{cache:'no-store'});
+    const d=await r.json();
+    renderList(d.items||[]);
+  }catch(e){setMsg($('addMsg'),'Gagal memuat daftar.','err')}
+}
+function renderList(items){
+  $('count').textContent=items.length;
+  const box=$('list');box.innerHTML='';
+  if(!items.length){box.innerHTML='<div class="empty">Belum ada testimoni.</div>';return}
+  items.forEach(t=>{
+    const row=document.createElement('div');row.className='row';
+    const img=document.createElement('img');img.src=t.foto;img.alt='';img.loading='lazy';
+    img.onerror=function(){this.onerror=null;this.src='https://placehold.co/112x148/19172b/b58aff?text=X'};
+    const info=document.createElement('div');info.className='t';
+    info.textContent=t.judul;
+    const small=document.createElement('small');small.textContent=t.foto;info.appendChild(small);
+    const del=document.createElement('button');del.type='button';del.className='del';del.textContent='HAPUS';
+    del.onclick=async()=>{
+      if(!confirm('Hapus testimoni "'+t.judul+'"?'))return;
+      del.disabled=true;
+      try{const d=await api('DELETE',{id:t.id});renderList(d.items);setMsg($('addMsg'),'Testimoni dihapus.','ok')}
+      catch(e){setMsg($('addMsg'),e.message,'err');del.disabled=false}
+    };
+    row.append(img,info,del);
+    box.appendChild(row);
+  });
+}
+
+$('loginForm').addEventListener('submit',async e=>{
+  e.preventDefault();
+  password=$('pw').value;
+  $('loginBtn').disabled=true;setMsg($('loginMsg'),'Memeriksa...');
+  try{
+    await api('POST',{action:'check'});
+    sessionStorage.setItem(KEY,password);
+    setMsg($('loginMsg'),'');
+    showPanel();
+  }catch(err){setMsg($('loginMsg'),err.message,'err')}
+  finally{$('loginBtn').disabled=false}
+});
+
+$('foto').addEventListener('input',()=>{
+  const v=$('foto').value.trim(),p=$('preview');
+  if(/^https?:\/\//i.test(v)){p.src=v;p.style.display='block'}else p.style.display='none';
+});
+$('preview').addEventListener('error',()=>{$('preview').style.display='none'});
+
+$('addForm').addEventListener('submit',async e=>{
+  e.preventDefault();
+  $('addBtn').disabled=true;setMsg($('addMsg'),'Menyimpan...');
+  try{
+    const d=await api('POST',{foto:$('foto').value.trim(),judul:$('judul').value.trim()});
+    renderList(d.items);
+    $('foto').value='';$('judul').value='';$('preview').style.display='none';
+    setMsg($('addMsg'),'Testimoni berhasil ditambahkan!','ok');
+  }catch(err){
+    setMsg($('addMsg'),err.message,'err');
+    if(/password/i.test(err.message)){sessionStorage.removeItem(KEY);showLogin()}
+  }finally{$('addBtn').disabled=false}
+});
+
+$('logoutBtn').addEventListener('click',()=>{
+  sessionStorage.removeItem(KEY);password='';$('pw').value='';showLogin();
+});
+
+// auto-login kalau password masih tersimpan di sesi
+(async()=>{
+  if(!password)return;
+  try{await api('POST',{action:'check'});showPanel()}
+  catch{sessionStorage.removeItem(KEY);password=''}
+})();
+</script>
+</body>
+</html>
