@@ -20,11 +20,11 @@ body{margin:0;background:radial-gradient(ellipse at 20% -10%,#48205a66,transpare
 .home{display:flex;align-items:center;gap:10px;padding:17px 4px 13px;border-bottom:1px solid var(--line);font-size:22px;font-weight:900;letter-spacing:.2px}
 .sym{color:#bb8bff;text-shadow:0 0 16px #a46cff55}
 .social,.main-card,.item-card,.tool-feature{background:linear-gradient(145deg,rgba(28,25,47,.96),rgba(14,22,37,.97));border:1px solid var(--line);box-shadow:0 12px 28px #0002,inset 0 1px #ffffff06}
-.social{margin-top:16px;border-radius:23px;padding:16px 15px;display:flex;align-items:center;gap:12px;font-size:clamp(15px,4vw,21px);font-weight:850;line-height:1.4;overflow-wrap:anywhere}
+.social{margin-top:16px;border-radius:23px;padding:16px 15px;display:flex;align-items:center;gap:12px;font-size:clamp(15px,4vw,21px);font-weight:850;line-height:1.4;overflow-wrap:anywhere;cursor:pointer}
 .mini-logo{width:43px;height:43px;flex:none;border-radius:15px;display:grid;place-items:center;background:linear-gradient(135deg,var(--pink),var(--violet),var(--blue));color:#fff;font-weight:1000;box-shadow:0 0 18px #a46cff2c}
 .subline{color:var(--muted);font-size:.72em;font-weight:650;letter-spacing:.5px}
 .main-card{margin-top:15px;border-radius:25px;padding:20px 16px}
-.card-title{display:flex;align-items:center;justify-content:center;gap:10px;font-size:19px;font-weight:900;letter-spacing:.2px}
+.card-title{display:flex;align-items:center;justify-content:center;gap:10px;font-size:19px;font-weight:900;letter-spacing:.2px;text-align:center;overflow-wrap:anywhere}
 .card-title .sym{font-size:27px}
 .desc{font-size:13px;color:#b2aec5;line-height:1.7;margin:15px 0 19px}
 .pill-button{display:block;width:min(100%,360px);margin:auto;border:1px solid #b17cff88;border-radius:16px;padding:12px;background:linear-gradient(100deg,#6d3bba,#3b4a9b);color:#fff;font-size:14px;font-weight:850;box-shadow:0 7px 24px #814de833;cursor:pointer}
@@ -37,208 +37,478 @@ body{margin:0;background:radial-gradient(ellipse at 20% -10%,#48205a66,transpare
 .item-info p{font-size:12px;color:#a7a2bd;margin:0;overflow-wrap:anywhere}
 .badge{flex:none;border:1px solid #8d71ed99;border-radius:12px;padding:8px 10px;min-width:79px;text-align:center;background:linear-gradient(120deg,#29204a,#172b49);color:#d0bcff;font-weight:900;font-size:12px;cursor:pointer}
 .credit{text-align:center;margin-top:23px;padding:0 0 11px;border-bottom:1px solid var(--line);color:#9288b3;font-size:12px;letter-spacing:.4px}
-.tools-heading{margin-top:20px}
-.tool-feature{margin-top:13px;border-radius:21px;padding:17px 15px;display:flex;align-items:center;gap:13px;min-height:89px}
-.tool-feature .glyph{font-size:27px;color:#b98aff;filter:drop-shadow(0 0 9px #a46cff44)}
-.tool-feature h3{font-size:14px;margin:0;font-weight:900;letter-spacing:.25px}
-.tool-feature p{font-size:12px;line-height:1.55;color:var(--muted);margin:6px 0 0}
-button{transition:transform .18s,filter .18s;cursor:pointer}
-button:hover{filter:brightness(1.13)}button:active{transform:scale(.98)}
-.sensitivity-card{display:block;margin-top:13px;padding:22px 16px 18px;border:1px solid var(--line);border-radius:22px;background:linear-gradient(145deg,rgba(28,25,47,.96),rgba(14,22,37,.97));box-shadow:0 12px 28px #0002,inset 0 1px #ffffff06}
-.sensitivity-title{display:flex;align-items:center;gap:10px;margin:0 0 22px 10px;color:var(--text);font-size:clamp(15px,4.2vw,21px);font-weight:900;letter-spacing:.2px}
-.sensitivity-title .glyph{font-size:25px;color:#bb8bff}
-.sens-row{margin:0 0 23px}
-.sens-label{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:13px;color:var(--text);font-size:15px;font-weight:800}
-.sens-value{color:#d0bcff;font-size:17px;font-weight:900;font-variant-numeric:tabular-nums}
-.sens-slider{display:block;width:100%;height:24px;margin:0;appearance:none;-webkit-appearance:none;background:transparent;cursor:pointer}
+.device-info-card{margin-top:14px;padding:12px 14px;border:1px solid rgba(164,108,255,.48);border-radius:18px;background:linear-gradient(115deg,rgba(39,27,62,.96),rgba(15,29,47,.98));box-shadow:0 8px 22px #0002,inset 0 1px #ffffff08}
+.device-info-title{margin:0 0 10px;font-size:12px;font-weight:950;letter-spacing:1.6px;text-align:center;background:linear-gradient(90deg,#ff6c9c,#b58aff 60%,#70d8ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.device-info-subtitle{margin-bottom:4px;color:#a6a1bb;font-size:12px;font-weight:600}
+.device-info-row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.device-info-version{font-size:30px;font-weight:950;line-height:1.1;letter-spacing:-.6px;color:#f7f4ff}
+.device-info-status{display:flex;align-items:center;gap:6px;padding:7px 10px;border:1px solid rgba(164,108,255,.32);border-radius:30px;background:#09081299;font-size:11px;font-weight:850;white-space:nowrap}
+.device-info-check{color:#19d6a0;font-size:15px}
+.user-cards{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:13px}
+.user-card{min-width:0;padding:17px 10px;border:1px solid var(--line);border-radius:18px;background:linear-gradient(145deg,#24183b,#12243a);color:var(--text);text-align:center;cursor:pointer}
+.user-card.vip{background:linear-gradient(145deg,#382044,#182e50);border-color:#ff4d8399}
+.user-icon{display:block;font-size:27px;margin-bottom:7px}
+.user-card strong{display:block;font-size:14px;font-weight:900}
+.user-card small{display:block;margin-top:5px;color:var(--muted);font-size:10px}
+.vip-modal{position:fixed;inset:0;z-index:10000;display:none;align-items:center;justify-content:center;padding:20px;background:#05040bd9}
+.vip-modal.show{display:flex}
+.vip-box{width:100%;max-width:360px;padding:23px 18px;border:1px solid var(--line);border-radius:22px;background:linear-gradient(145deg,#211733,#101d30);box-shadow:0 15px 50px #0008}
+.vip-box h2{margin:0 0 7px;text-align:center;font-size:22px}
+.vip-box p{margin:0 0 18px;color:var(--muted);text-align:center;font-size:12px}
+.vip-input{width:100%;margin-bottom:12px;padding:13px;border:1px solid var(--line);border-radius:11px;outline:none;background:#0c0b18;color:white;font-size:14px}
+.vip-actions{display:flex;gap:10px;margin-top:5px}
+.vip-actions button{flex:1;padding:12px 8px;border:1px solid var(--line);border-radius:11px;color:white;font-weight:800;background:#29204a}
+.vip-actions .vip-submit{background:linear-gradient(100deg,#6d3bba,#3b4a9b)}
+.vip-error{display:none;margin:0 0 12px;color:#ff718a;font-size:12px;text-align:center}
+#vipPage,#freePage{display:none}
+.vip-status{margin-top:12px;color:#bdb4d4;text-align:center;font-size:12px;line-height:1.5}
+.sensitivity-card,.settingx-card{display:block;margin-top:13px;padding:22px 16px 18px;border:1px solid var(--line);border-radius:22px;background:linear-gradient(145deg,rgba(28,25,47,.96),rgba(14,22,37,.97));box-shadow:0 12px 28px #0002,inset 0 1px #ffffff06}
+.sensitivity-title{display:flex;align-items:center;gap:10px;margin:0 0 22px 10px;font-size:clamp(15px,4.2vw,21px);font-weight:900}
+.sens-row{margin:0 0 18px}
+.sens-label{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:8px;font-size:15px;font-weight:800}
+.sens-value{color:#d0bcff;font-size:17px;font-weight:900}
+.sens-slider{display:block;width:100%;height:24px;appearance:none;-webkit-appearance:none;background:transparent;cursor:pointer}
 .sens-slider::-webkit-slider-runnable-track{height:4px;border-radius:10px;background:#29204a}
-.sens-slider::-moz-range-track{height:4px;border-radius:10px;background:#29204a}
-.sens-slider::-webkit-slider-thumb{appearance:none;-webkit-appearance:none;width:20px;height:20px;margin-top:-8px;border-radius:50%;background:#a46cff;border:1px solid #d0bcff;box-shadow:0 0 10px #a46cff44}
-.sens-slider::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:#a46cff;border:1px solid #d0bcff}
+.sens-slider::-webkit-slider-thumb{appearance:none;-webkit-appearance:none;width:20px;height:20px;margin-top:-8px;border-radius:50%;background:#a46cff;border:1px solid #d0bcff}
 .sens-preset{display:block;width:100%;margin-top:4px;padding:14px 12px;border:1px solid #8d71ed99;border-radius:12px;background:linear-gradient(120deg,#29204a,#172b49);color:#d0bcff;font-size:15px;font-weight:800}
 .sens-note{margin:12px 2px 0;color:var(--muted);font-size:11px;line-height:1.5;text-align:center}
-.settingx-heading{margin:24px 0 0;padding:0 0 8px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px;font-size:22px;font-weight:950;letter-spacing:.3px;color:var(--text)}
-.settingx-heading .settingx-symbol{font-size:25px;color:var(--violet)}
-.settingx-card{margin-top:13px;border:1px solid var(--line);border-radius:22px;padding:22px 20px;background:linear-gradient(145deg,rgba(28,25,47,.96),rgba(14,22,37,.97));box-shadow:0 12px 28px #0002,inset 0 1px #ffffff06}
+.settingx-heading{margin:24px 0 0;padding:0 0 8px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px;font-size:22px;font-weight:950}
 .settingx-row{min-height:54px;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:4px 0}
-.settingx-label{color:#c4e1f8;font-size:clamp(13px,3.8vw,18px);font-weight:950;letter-spacing:.25px;line-height:1.25}
-.settingx-switch{position:relative;display:block;flex:none;width:102px;height:48px;border:0;border-radius:28px;background:#202020;padding:0;cursor:pointer;box-shadow:none}
-.settingx-switch::before{content:"";position:absolute;width:38px;height:38px;left:5px;top:5px;border-radius:50%;background:#fff;transition:transform .2s,background .2s}
+.settingx-label{color:#c4e1f8;font-size:clamp(13px,3.8vw,18px);font-weight:950;line-height:1.25}
+.settingx-switch{position:relative;display:block;flex:none;width:92px;height:44px;border:0;border-radius:28px;background:#202020;padding:0;cursor:pointer}
+.settingx-switch::before{content:"";position:absolute;width:34px;height:34px;left:5px;top:5px;border-radius:50%;background:#fff;transition:transform .2s}
 .settingx-switch[aria-checked="true"]{background:linear-gradient(120deg,#6d3bba,#3b4a9b)}
-.settingx-switch[aria-checked="true"]::before{transform:translateX(54px);background:#fff}
-.settingx-switch:focus-visible{outline:2px solid #258dd8;outline-offset:3px}
-@media(max-width:390px){.settingx-card{padding:18px 15px}.settingx-switch{width:92px;height:44px}.settingx-switch::before{width:34px;height:34px;left:5px;top:5px}.settingx-switch[aria-checked="true"]::before{transform:translateX(48px)}.settingx-label{font-size:13px}}
-@media(max-width:390px){.header{padding:15px 10px}.logo{width:55px;height:55px;border-radius:17px}.logo span{border-radius:15px}.brand{font-size:23px}.profile{font-size:10px;padding:8px}.section{padding:0 11px}.app-icon{width:50px;height:50px}.badge{min-width:68px;padding:7px 8px;font-size:11px}.item-card{gap:9px;padding:13px 10px}.social{padding:14px 12px}.sensitivity-card{padding:19px 13px 16px}.sens-label{font-size:14px}}
-.settingx-toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,18px);width:max-content;max-width:calc(100vw - 32px);padding:13px 18px;border:1px solid var(--line);border-radius:14px;background:linear-gradient(145deg,rgba(28,25,47,.98),rgba(14,22,37,.98));color:var(--text);font-size:14px;font-weight:850;text-align:center;box-shadow:0 12px 28px #0005;opacity:0;visibility:hidden;z-index:9999;transition:opacity .2s,transform .2s,visibility .2s}
+.settingx-switch[aria-checked="true"]::before{transform:translateX(48px)}
+.settingx-toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,18px);width:max-content;max-width:calc(100vw - 32px);padding:13px 18px;border:1px solid var(--line);border-radius:14px;background:linear-gradient(145deg,#1c192f,#0e1625);color:var(--text);font-size:14px;font-weight:850;text-align:center;box-shadow:0 12px 28px #0005;opacity:0;visibility:hidden;z-index:9999;transition:.2s}
 .settingx-toast.show{opacity:1;visibility:visible;transform:translate(-50%,0)}
+button{transition:transform .18s,filter .18s;cursor:pointer}
+button:hover{filter:brightness(1.13)}
+button:active{transform:scale(.98)}
+.menu3-wrap{position:relative;margin-left:0;flex:none}
+.menu3-btn{width:43px;height:43px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;padding:0;border:1px solid #b184ff77;border-radius:13px;background:linear-gradient(135deg,#29204a,#172b49);box-shadow:0 0 16px #a46cff20}
+.menu3-btn span{display:block;width:19px;height:2px;border-radius:5px;background:#e5d5ff;transition:transform .2s,opacity .2s}
+.menu3-btn.active span:first-child{transform:translateY(7px) rotate(45deg)}
+.menu3-btn.active span:nth-child(2){opacity:0}
+.menu3-btn.active span:last-child{transform:translateY(-7px) rotate(-45deg)}
+.menu3-dropdown{position:absolute;top:51px;right:0;z-index:9998;width:min(260px,calc(100vw - 24px));padding:8px;border:1px solid var(--line);border-radius:17px;background:linear-gradient(145deg,#211733,#101d30);box-shadow:0 15px 35px #0009;display:none}
+.menu3-dropdown.show{display:block;animation:menu3In .18s ease}
+@keyframes menu3In{from{opacity:0;transform:translateY(-7px)}to{opacity:1;transform:translateY(0)}}
+.menu3-dropdown button{width:100%;display:flex;align-items:center;gap:11px;padding:11px 10px;border:0;border-radius:10px;background:transparent;color:var(--text);text-align:left;font-size:12px;font-weight:800}
+.menu3-dropdown button:hover{background:#a46cff20}
+.menu3-icon{width:32px;height:32px;flex:none;display:grid;place-items:center;border-radius:10px;background:#a46cff20;font-size:16px}
+.menu3-label small{display:block;margin-top:3px;color:var(--muted);font-size:10px;font-weight:600}
+
+/* CARD CONFIG, CUAN, FILE FF, TESTIMONI */
+.new-feature-cards{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:13px}
+.new-feature-card{min-width:0;min-height:135px;padding:17px 10px;border:1px solid var(--line);border-radius:18px;background:linear-gradient(145deg,#24183b,#12243a);color:var(--text);text-align:center;cursor:pointer;box-shadow:0 12px 28px #0002,inset 0 1px #ffffff06}
+.new-feature-card.cuan{background:linear-gradient(145deg,#382044,#182e50);border-color:#ff4d8399}
+.new-feature-card.fileff{background:linear-gradient(145deg,#1d2c4a,#12243a);border-color:#58c7ff80}
+.new-feature-card.testi{background:linear-gradient(145deg,#3a2347,#182e50);border-color:#b184ff99}
+.new-feature-icon{display:block;font-size:29px;margin-bottom:8px}
+.new-feature-card strong{display:block;font-size:15px;font-weight:950;letter-spacing:.5px}
+.new-feature-card small{display:block;margin-top:6px;color:var(--muted);font-size:10px;line-height:1.5}
+.new-feature-card .feature-arrow{display:block;margin-top:10px;color:#cbb0ff;font-size:10px;font-weight:850}
+#configPage,#cuanPage,#fileFFPage,#testiPage{display:none}
+.feature-main{margin-top:15px;padding:18px 15px;border:1px solid var(--line);border-radius:22px;background:linear-gradient(145deg,rgba(28,25,47,.96),rgba(14,22,37,.97));box-shadow:0 12px 28px #0002,inset 0 1px #ffffff06}
+.coming-card{margin-top:16px;padding:28px 14px;border:1px solid #ff4d8380;border-radius:18px;background:linear-gradient(145deg,#30203f,#151b32);text-align:center}
+.coming-icon{font-size:38px;margin-bottom:12px}
+.coming-title{font-size:22px;font-weight:1000;letter-spacing:1px;background:linear-gradient(90deg,#ff6c9c,#b58aff 65%,#70d8ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.coming-desc{margin:10px 0 0;color:var(--muted);font-size:12px;line-height:1.7}
+.cuan-photo-wrap{position:relative;overflow:hidden;margin-top:15px;border:1px solid var(--line);border-radius:20px;background:#111020;box-shadow:0 12px 28px #0003}
+.cuan-photo{display:block;width:100%;height:auto;max-height:360px;min-height:180px;object-fit:cover}
+.cuan-photo-label{position:absolute;left:10px;bottom:10px;padding:7px 10px;border:1px solid #ffffff30;border-radius:9px;background:#090812cc;color:#fff;font-size:10px;font-weight:850}
+.cuan-description{margin-top:15px;padding:17px 15px;border:1px solid var(--line);border-radius:18px;background:linear-gradient(145deg,#24183b,#12243a)}
+.cuan-description h3{margin:0 0 10px;font-size:17px;font-weight:950}
+.cuan-description p{margin:0;color:#b2aec5;font-size:13px;line-height:1.8}
+.cuan-help-row{display:flex;align-items:center;gap:12px;margin-top:16px;padding:15px;border:1px solid var(--line);border-radius:18px;background:linear-gradient(145deg,#211733,#101d30)}
+.cuan-help-text{flex:1;min-width:0}
+.cuan-help-text strong{display:block;font-size:13px;font-weight:900}
+.cuan-help-text small{display:block;margin-top:5px;color:var(--muted);font-size:11px;line-height:1.5}
+.cuan-help-button{width:48px;height:48px;flex:none;border:1px solid #c4a0ff;border-radius:50%;background:linear-gradient(135deg,#6d3bba,#3b4a9b);color:#fff;font-size:25px;font-weight:950;box-shadow:0 0 20px #a46cff30;cursor:pointer}
+.cuan-help-modal{position:fixed;inset:0;z-index:10001;display:none;align-items:center;justify-content:center;padding:20px;background:#05040bd9}
+.cuan-help-modal.show{display:flex}
+.cuan-help-box{width:100%;max-width:380px;padding:23px 18px;border:1px solid var(--line);border-radius:22px;background:linear-gradient(145deg,#211733,#101d30);box-shadow:0 15px 50px #0008}
+.cuan-help-box h2{margin:0 0 12px;text-align:center;font-size:20px}
+.cuan-help-box p{margin:0;color:#b2aec5;font-size:13px;line-height:1.8}
+.cuan-help-close{width:100%;margin-top:18px;padding:12px;border:1px solid #b17cff88;border-radius:12px;background:linear-gradient(100deg,#6d3bba,#3b4a9b);color:#fff;font-weight:850}
+
+/* FILE FF + TESTIMONI */
+.empty-card{margin-top:16px;padding:28px 14px;border:1px dashed var(--line);border-radius:18px;text-align:center;color:var(--muted);font-size:13px;line-height:1.9}
+.testi-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:15px}
+.testi-card{min-width:0;overflow:hidden;border:1px solid var(--line);border-radius:18px;background:linear-gradient(145deg,rgba(28,25,47,.96),rgba(14,22,37,.97));box-shadow:0 12px 28px #0002}
+.testi-card img{display:block;width:100%;aspect-ratio:3/4;object-fit:cover;background:#111020;cursor:pointer}
+.testi-card .testi-title{padding:10px 11px;font-size:12px;font-weight:850;line-height:1.4;text-align:center;overflow-wrap:anywhere}
+.testi-viewer{position:fixed;inset:0;z-index:10002;display:none;align-items:center;justify-content:center;padding:16px;background:#05040bf2}
+.testi-viewer.show{display:flex}
+.testi-viewer img{max-width:100%;max-height:100%;border-radius:12px}
+
+@media(max-width:390px){.header{padding:15px 10px;gap:8px}.logo{width:55px;height:55px;border-radius:17px}.brand{font-size:23px}.profile{font-size:10px;padding:8px 7px}.menu3-btn{width:39px;height:39px}.section{padding:0 11px}.app-icon{width:50px;height:50px}.badge{min-width:68px;padding:7px 8px;font-size:11px}.item-card{gap:9px;padding:13px 10px}.social{padding:14px 12px}.sensitivity-card,.settingx-card{padding:18px 13px}.device-info-version{font-size:27px}.device-info-status{padding:7px 8px;font-size:10px}}
 </style>
 </head>
 <body>
-<main class="page">
+<main class="page" id="homePage">
 <header class="header">
   <div class="logo"><img src="https://files.catbox.moe/bfhbjh.png" alt="Logo Tools Vortex Verse"></div>
-  <div class="brand">TOOLS <span>VORTEX VERSE</span></div>
-  <button class="profile" onclick="showMessage('Join Saluran Admin Vortex https://whatsapp.com/channel/0029Vb65oya2Jl8IkD5zyM2a Dijamin Full File Dan Config')">◈ ADMIN</button>
+  <div class="brand">WEB TOOLS<br><span>VORTEX VERSE.</span></div>
+  <button class="profile" onclick="showMessage('Website Ini Sedang Dalam Tahap Perkembangan! VERSION 1.0')">◈ INFO ◈</button>
+  <div class="menu3-wrap">
+    <button class="menu3-btn" id="menu3Btn" type="button" aria-label="Buka menu" aria-expanded="false" onclick="toggleMenu3(event)"><span></span><span></span><span></span></button>
+    <nav class="menu3-dropdown" id="menu3Dropdown" aria-label="Menu kontak dan sosial media">
+      <button type="button" onclick="openMenuLink('admin')"><span class="menu3-icon">👨‍💻</span><span class="menu3-label">CONTACT ADMIN<small>Hubungi administrator</small></span></button>
+      <button type="button" onclick="openMenuLink('developer')"><span class="menu3-icon">🛠️</span><span class="menu3-label">CONTACT DEVELOPER<small>Hubungi pengembang</small></span></button>
+      <button type="button" onclick="openMenuLink('wa1')"><span class="menu3-icon">💬</span><span class="menu3-label">SALURAN WHATSAPP 1<small>Saluran resmi Vortex Verse</small></span></button>
+      <button type="button" onclick="openMenuLink('wa2')"><span class="menu3-icon">💬</span><span class="menu3-label">SALURAN WHATSAPP 2<small>Saluran WhatsApp kedua</small></span></button>
+      <button type="button" onclick="openMenuLink('youtube')"><span class="menu3-icon">▶️</span><span class="menu3-label">CHANNEL YOUTUBE<small>Official Vortex Verse</small></span></button>
+      <button type="button" onclick="openMenuLink('tiktok')"><span class="menu3-icon">🎵</span><span class="menu3-label">TIKTOK UTAMA<small>Akun TikTok resmi</small></span></button>
+    </nav>
+  </div>
 </header>
 <div class="section">
   <div class="home"><span class="sym">◆</span> HOME</div>
-  <div class="social" onclick="openLink('social')" role="button" tabindex="0">
-    <div class="mini-logo">VV</div>
-    <div>TIKTOK : VORTEX VERSE<br><span class="subline">OFFICIAL COMMUNITY</span></div>
-  </div>
-  <section class="main-card">
-    <div class="card-title"><span class="sym">⬡</span> TOOLS VORTEX VERSE</div>
-    <p class="desc">Selamat datang di tools Vortex Verse. Pilih fitur yang tersedia dan gunakan sesuai kebutuhan. Jika menemukan masalah, laporkan melalui tombol di bawah.</p>
-    <button class="pill-button" onclick="openLink('bug')">✚ &nbsp; Lapor Bug</button>
+  <section class="device-info-card" aria-label="Device Information">
+    <h2 class="device-info-title">DEVICE INFORMATION</h2>
+    <div class="device-info-subtitle">Your Phone Android Version</div>
+    <div class="device-info-row"><div class="device-info-version" id="androidVersion">--</div><div class="device-info-status"><span id="deviceStatus">Checking</span><span class="device-info-check" id="deviceCheck">●</span></div></div>
   </section>
+  <div class="social" onclick="openLink('social')" role="button" tabindex="0"><div class="mini-logo">VV</div><div>YOUTUBE : OFFICIAL VORTEX<br><span class="subline">TEKAN UNTUK DIARAHKAN KE YOUTUBE</span></div></div>
+  <div class="user-cards">
+    <button class="user-card" onclick="showFreeNotice()"><span class="user-icon">👤</span><strong>USER FREE</strong><small>AKSES REGULER</small></button>
+    <button class="user-card vip" onclick="openVipLogin()"><span class="user-icon">👑</span><strong>USER VIP</strong><small>AKSES PREMIUM</small></button>
+  </div>
+
+  <!-- CARD CONFIG, CUAN, FILE FF, TESTIMONI -->
+  <div class="new-feature-cards">
+    <button class="new-feature-card" type="button" onclick="openFeaturePage('configPage')">
+      <span class="new-feature-icon">⚙️</span>
+      <strong>CONFIG</strong>
+      <small>CONFIG FREE FIRE</small>
+      <span class="feature-arrow">BUKA MENU →</span>
+    </button>
+    <button class="new-feature-card cuan" type="button" onclick="openFeaturePage('cuanPage')">
+      <span class="new-feature-icon">💰</span>
+      <strong>CUAN</strong>
+      <small>5 MENIT CUAN 20K</small>
+      <span class="feature-arrow">LIHAT DETAIL →</span>
+    </button>
+    <button class="new-feature-card fileff" type="button" onclick="openFeaturePage('fileFFPage')">
+      <span class="new-feature-icon">📁</span>
+      <strong>FILE FF</strong>
+      <small>List File Free Fire</small>
+      <span class="feature-arrow">BUKA MENU →</span>
+    </button>
+    <button class="new-feature-card testi" type="button" onclick="openFeaturePage('testiPage')">
+      <span class="new-feature-icon">⭐</span>
+      <strong>TESTIMONI</strong>
+      <small>All Testimoni Vortex</small>
+      <span class="feature-arrow">LIHAT DETAIL →</span>
+    </button>
+  </div>
+  <!-- AKHIR CARD -->
+
+  <section class="main-card"><div class="card-title"><span class="sym">⬡</span> TOOLS VORTEX VERSE</div><p class="desc">Welcome In WebTools Vortex Verse, Website Ini Digunakan Untuk Meningkatkan Performa Permainan. WEBTOOLS VERSION 1.0.</p><button class="pill-button" onclick="openLink('bug')">✚ &nbsp; Lapor Bug</button></section>
   <div class="section-heading"><span class="sym">▣</span> GAME</div>
-  <div class="item-card">
-    <div class="app-icon">🔥</div>
-    <div class="item-info"><h3>Free Fire</h3><p>com.dts.freefireth</p></div>
-    <button class="badge" onclick="launchApp('com.dts.freefireth')">BIASA ↗</button>
-  </div>
-  <div class="item-card">
-    <div class="app-icon">⚡</div>
-    <div class="item-info"><h3>Free Fire Max</h3><p>com.dts.freefiremax</p></div>
-    <button class="badge" onclick="launchApp('com.dts.freefiremax')">MAX ↗</button>
-  </div>
-  <div class="credit">VORTEX VERSE · OFFICIAL COMMUNITY ✦</div>
-  <div class="section-heading tools-heading"><span class="sym">⚙</span> TOOLS</div>
-  <section class="sensitivity-card" aria-label="Generate Sensitivity">
-    <h2 class="sensitivity-title"><span class="glyph">↗☛</span> GENERATE SENSITIVITY</h2>
-    <div class="sens-row"><label class="sens-label" for="general"><span>General</span><output class="sens-value" id="generalValue">180</output></label><input class="sens-slider" id="general" type="range" min="0" max="200" value="180" oninput="updateSensValue('general')"></div>
-    <div class="sens-row"><label class="sens-label" for="rdot"><span>R.dot</span><output class="sens-value" id="rdotValue">80</output></label><input class="sens-slider" id="rdot" type="range" min="0" max="200" value="80" oninput="updateSensValue('rdot')"></div>
-    <div class="sens-row"><label class="sens-label" for="x2"><span>X2 Scope</span><output class="sens-value" id="x2Value">120</output></label><input class="sens-slider" id="x2" type="range" min="0" max="200" value="120" oninput="updateSensValue('x2')"></div>
-    <div class="sens-row"><label class="sens-label" for="x4"><span>X4 Scope</span><output class="sens-value" id="x4Value">96</output></label><input class="sens-slider" id="x4" type="range" min="0" max="200" value="96" oninput="updateSensValue('x4')"></div>
-    <div class="sens-row"><label class="sens-label" for="awm"><span>AWM Scope</span><output class="sens-value" id="awmValue">80</output></label><input class="sens-slider" id="awm" type="range" min="0" max="200" value="80" oninput="updateSensValue('awm')"></div>
-    <div class="sens-row"><label class="sens-label" for="quicklock"><span>QUICK LOCK</span><output class="sens-value" id="quicklockValue">80</output></label><input class="sens-slider" id="quicklock" type="range" min="0" max="200" value="80" oninput="updateSensValue('quicklock')"></div>
-    <button class="sens-preset" onclick="showSettingXToast('Sensitivtiy Berhasil Di Ubah, Silahkan Buka Free Fire!')">General</button>
-    <p class="sens-note" id="sensNote">Geser slider untuk mengatur nilai sensitivitas. Tekan General untuk menampilkan notifikasi.</p>
-  </section>
-  <div class="settingx-heading"><span class="settingx-symbol">☷</span> SETTINGX MENU</div>
-  <section class="settingx-card" aria-label="SettingX Menu">
-    <div class="settingx-row"><span class="settingx-label">EASY DRAG 57%</span><button class="settingx-switch" type="button" role="switch" aria-checked="false" aria-label="Easy Drag 57%" onclick="toggleSettingX(this)"></button></div>
-    <div class="settingx-row"><span class="settingx-label">SENSITIVITY OPTIMAZE</span><button class="settingx-switch" type="button" role="switch" aria-checked="false" aria-label="Sensitivity Optimaze" onclick="toggleSettingX(this)"></button></div>
-    <div class="settingx-row"><span class="settingx-label">AIM ASSIST</span><button class="settingx-switch" type="button" role="switch" aria-checked="false" aria-label="Aim Assist" onclick="toggleSettingX(this)"></button></div>
-    <div class="settingx-row"><span class="settingx-label">TOUCH RESPONSIVE</span><button class="settingx-switch" type="button" role="switch" aria-checked="false" aria-label="Touch Responsive" onclick="toggleSettingX(this)"></button></div>
-  </section>
-  <div style="text-align:center;margin-top:24px;padding:16px 10px 8px;border-top:1px solid rgba(164,108,255,.45);color:#a6a1bb;font-size:12px;font-weight:800;letter-spacing:1px;">
-    <span style="background:linear-gradient(90deg,#ff6c9c,#b58aff 65%,#70d8ff);-webkit-background-clip:text;background-clip:text;color:transparent;">WebTools - Vortex Verse 2026</span>
-  </div>
+  <div class="item-card"><div class="app-icon">⚜️</div><div class="item-info"><h3>Free Fire</h3><p>com.dts.freefireth</p></div><button class="badge" onclick="launchApp('com.dts.freefireth')">TAP</button></div>
+  <div class="item-card"><div class="app-icon">🔱</div><div class="item-info"><h3>Free Fire Max</h3><p>com.dts.freefiremax</p></div><button class="badge" onclick="launchApp('com.dts.freefiremax')">TAP</button></div>
+  <div class="credit">✦ VORTEX VERSE · OFFICIAL COMMUNITY ✦</div>
+  <div style="text-align:center;margin-top:24px;padding:16px 10px 8px;border-top:1px solid rgba(164,108,255,.45);color:#a6a1bb;font-size:12px;font-weight:800;letter-spacing:1px;"><span style="background:linear-gradient(90deg,#ff6c9c,#b58aff 65%,#70d8ff);-webkit-background-clip:text;background-clip:text;color:transparent;">WebTools - Vortex Verse 2026</span></div>
 </div>
 </main>
+
+<section id="freePage" class="page">
+  <header class="header"><div class="logo"><img src="https://files.catbox.moe/bfhbjh.png" alt="Logo Vortex Verse"></div><div class="brand">USER <span>FREE</span></div><button class="profile" type="button" onclick="closeFreePage()">← KEMBALI</button></header>
+  <div class="section">
+    <div class="home"><span class="sym">👤</span> MENU FREE</div>
+    <section class="main-card"><div class="card-title">TOOLS &amp; SETTINGX</div><p class="desc">Menu tools dan pengaturan khusus pengguna Free ada di halaman ini.</p></section>
+    <div class="section-heading"><span class="sym">⚙</span> TOOLS</div>
+    <section class="sensitivity-card" aria-label="Generate Sensitivity">
+      <h2 class="sensitivity-title">↗☛ GENERATE SENSITIVITY</h2>
+      <div class="sens-row"><label class="sens-label" for="general"><span>General</span><output class="sens-value" id="generalValue">180</output></label><input class="sens-slider" id="general" type="range" min="0" max="200" value="180" oninput="updateSensValue('general')"></div>
+      <div class="sens-row"><label class="sens-label" for="rdot"><span>R.dot</span><output class="sens-value" id="rdotValue">80</output></label><input class="sens-slider" id="rdot" type="range" min="0" max="200" value="80" oninput="updateSensValue('rdot')"></div>
+      <div class="sens-row"><label class="sens-label" for="x2"><span>X2 Scope</span><output class="sens-value" id="x2Value">120</output></label><input class="sens-slider" id="x2" type="range" min="0" max="200" value="120" oninput="updateSensValue('x2')"></div>
+      <div class="sens-row"><label class="sens-label" for="x4"><span>X4 Scope</span><output class="sens-value" id="x4Value">96</output></label><input class="sens-slider" id="x4" type="range" min="0" max="200" value="96" oninput="updateSensValue('x4')"></div>
+      <div class="sens-row"><label class="sens-label" for="awm"><span>AWM Scope</span><output class="sens-value" id="awmValue">80</output></label><input class="sens-slider" id="awm" type="range" min="0" max="200" value="80" oninput="updateSensValue('awm')"></div>
+      <div class="sens-row"><label class="sens-label" for="quicklock"><span>QUICK LOCK</span><output class="sens-value" id="quicklockValue">80</output></label><input class="sens-slider" id="quicklock" type="range" min="0" max="200" value="80" oninput="updateSensValue('quicklock')"></div>
+      <button class="sens-preset" onclick="showSettingXToast('Sensitivity Berhasil Diubah, Silahkan Buka Free Fire!')">General</button><p class="sens-note" id="sensNote">Geser slider untuk mengatur nilai sensitivitas. Tekan General untuk menampilkan notifikasi.</p>
+    </section>
+    <div class="settingx-heading"><span class="sym">☷</span> SETTINGX MENU</div>
+    <section class="settingx-card" aria-label="SettingX Menu">
+      <div class="settingx-row"><span class="settingx-label">EASY DRAG 57%</span><button class="settingx-switch" type="button" role="switch" aria-checked="false" aria-label="Easy Drag 57%" onclick="toggleSettingX(this)"></button></div>
+      <div class="settingx-row"><span class="settingx-label">SENSITIVITY OPTIMAZE</span><button class="settingx-switch" type="button" role="switch" aria-checked="false" aria-label="Sensitivity Optimaze" onclick="toggleSettingX(this)"></button></div>
+      <div class="settingx-row"><span class="settingx-label">AIM ASSIST</span><button class="settingx-switch" type="button" role="switch" aria-checked="false" aria-label="Aim Assist" onclick="toggleSettingX(this)"></button></div>
+      <div class="settingx-row"><span class="settingx-label">TOUCH RESPONSIVE</span><button class="settingx-switch" type="button" role="switch" aria-checked="false" aria-label="Touch Responsive" onclick="toggleSettingX(this)"></button></div>
+    </section>
+  </div>
+</section>
+
+<section id="vipPage" class="page">
+  <header class="header"><div class="logo"><img src="https://files.catbox.moe/bfhbjh.png" alt="Logo Vortex Verse"></div><div class="brand">VORTEX <span>VIP</span></div><button class="profile" onclick="logoutVip()">KELUAR</button></header>
+  <div class="section">
+    <div class="home"><span class="sym">👑</span> VIP DASHBOARD</div>
+    <section class="main-card"><div class="card-title">SELAMAT DATANG, <span id="vipName">USER VIP</span></div><p class="desc">Login VIP berhasil. Akun Anda telah diverifikasi oleh server.</p><div class="vip-status" id="vipExpiry"></div><button class="pill-button" style="margin-top:18px" onclick="logoutVip()">KELUAR DARI VIP</button></section>
+    <div class="section-heading"><span class="sym">⚙</span> VIP TOOLS</div>
+    <section class="main-card"><div class="card-title">AKSES VIP AKTIF</div></section>
+    <section class="settingx-card" aria-label="VIP Switch Menu">
+      <div class="settingx-heading" style="margin-top:0;margin-bottom:15px;border-bottom:1px solid var(--line);">
+        <span class="sym">👑</span> VIP SWITCH MENU
+      </div>
+      <div class="settingx-row">
+        <span class="settingx-label">HEADLOCK 100%</span>
+        <button class="settingx-switch" type="button" role="switch" aria-checked="false" aria-label="Headlock 100%" onclick="toggleSettingX(this)"></button>
+      </div>
+      <div class="settingx-row">
+        <span class="settingx-label">HOLOGRAM CHAR</span>
+        <button class="settingx-switch" type="button" role="switch" aria-checked="false" aria-label="Hologram Char" onclick="toggleSettingX(this)"></button>
+      </div>
+      <div class="settingx-row">
+        <span class="settingx-label">BODY HS</span>
+        <button class="settingx-switch" type="button" role="switch" aria-checked="false" aria-label="Body Hs" onclick="toggleSettingX(this)"></button>
+      </div>
+    </section>
+    <section class="main-card">
+      <div class="card-title"><span class="sym">⬇</span> FILE HEADLOCK V1</div>
+      <p class="desc">Ini Adalah File Yang Dapat Membantu Aim Menjadi On Point Kepala</p>
+      <button class="pill-button" type="button" onclick="window.open('https://www.mediafire.com/file/jjastj6eo1rgdm7/HEADLOCK+V3+BY+VORTEX.7z/file','_blank','noopener,noreferrer')">⬇ &nbsp; DOWNLOAD FILE HEADLOCK V1</button>
+    </section>
+  </div>
+</section>
+
+<!-- HALAMAN CONFIG -->
+<section id="configPage" class="page">
+  <header class="header">
+    <div class="logo"><img src="https://files.catbox.moe/bfhbjh.png" alt="Logo Vortex Verse"></div>
+    <div class="brand">CONFIG <span>MENU</span></div>
+    <button class="profile" type="button" onclick="closeFeaturePage()">← KEMBALI</button>
+  </header>
+  <div class="section">
+    <div class="home"><span class="sym">⚙️</span> CONFIG MENU</div>
+    <section class="feature-main">
+      <div class="card-title"><span class="sym">◆</span> CONFIG FREE FIRE</div>
+      <div class="coming-card">
+        <div class="coming-icon">🚧</div>
+        <div class="coming-title">COMING SOON!</div>
+        <p class="coming-desc">Fitur CONFIG sedang dalam tahap persiapan. Silakan kembali lagi nanti untuk melihat pembaruan berikutnya.</p>
+      </div>
+    </section>
+  </div>
+</section>
+
+<!-- HALAMAN CUAN -->
+<section id="cuanPage" class="page">
+  <header class="header">
+    <div class="logo"><img src="https://files.catbox.moe/0f7sam.png" alt="Logo Vortex Verse"></div>
+    <div class="brand">MENU <span>CUAN</span></div>
+    <button class="profile" type="button" onclick="closeFeaturePage()">← KEMBALI</button>
+  </header>
+  <div class="section">
+    <div class="home"><span class="sym">💰</span> 5 MENIT CUAN 20K</div>
+
+    <div class="cuan-photo-wrap">
+      <!-- GANTI URL DI BAWAH INI DENGAN URL FOTO MILIK KAMU -->
+      <img
+        class="cuan-photo"
+        id="cuanPhoto"
+        src="https://files.catbox.moe/0f7sam.png"
+        alt="Foto informasi cuan"
+        onerror="this.onerror=null;this.src='https://placehold.co/760x420/19172b/b58aff?text=FOTO+TIDAK+TERSEDIA'">
+      <span class="cuan-photo-label">INFO CUAN VORTEX VERSE</span>
+    </div>
+
+    <section class="cuan-description">
+      <h3>💸 INFORMASI CUAN</h3>
+      <p>Selamat datang di halaman informasi cuan! Di sini kamu bisa mendapatkan 20k secara instan, Untuk cara mendapatkannya sangat gampang dan simpel, baca cara kerja cara kerja cuan untuk info selanjutnya</p>
+    </section>
+
+    <div class="cuan-help-row">
+      <div class="cuan-help-text">
+        <strong>❓ CARA KERJA CUAN</strong>
+        <small>Tekan tombol tanda tanya untuk membaca penjelasan cara kerja dan hal-hal yang perlu diperhatikan.</small>
+      </div>
+      <button class="cuan-help-button" type="button" aria-label="Cara kerja mendapatkan cuan" onclick="openCuanHelp()">?</button>
+    </div>
+  </div>
+</section>
+
+<!-- HALAMAN FILE FF -->
+<section id="fileFFPage" class="page">
+  <header class="header">
+    <div class="logo"><img src="https://files.catbox.moe/bfhbjh.png" alt="Logo Vortex Verse"></div>
+    <div class="brand">FILE <span>FF</span></div>
+    <button class="profile" type="button" onclick="closeFeaturePage()">← KEMBALI</button>
+  </header>
+  <div class="section">
+    <div class="home"><span class="sym">📁</span> FILE FREE FIRE MENU</div>
+    <div id="fileFFList"></div>
+  </div>
+</section>
+
+<!-- HALAMAN TESTIMONI -->
+<section id="testiPage" class="page">
+  <header class="header">
+    <div class="logo"><img src="https://files.catbox.moe/bfhbjh.png" alt="Logo Vortex Verse"></div>
+    <div class="brand">TESTI<span>MONI</span></div>
+    <button class="profile" type="button" onclick="closeFeaturePage()">← KEMBALI</button>
+  </header>
+  <div class="section">
+    <div class="home"><span class="sym">⭐</span> ALL TESTIMONI VORTEX</div>
+    <div id="testiGrid" class="testi-grid"></div>
+  </div>
+</section>
+
+<div id="testiViewer" class="testi-viewer" onclick="this.classList.remove('show')"><img id="testiViewerImg" alt="Testimoni"></div>
+
+<!-- POPUP CARA KERJA CUAN -->
+<div id="cuanHelpModal" class="cuan-help-modal" role="dialog" aria-modal="true" aria-labelledby="cuanHelpTitle">
+  <div class="cuan-help-box">
+    <h2 id="cuanHelpTitle">❓ CARA KERJA CUAN</h2>
+    <p>1. Baca informasi Di Halaman Cuan.<br><br>2. Chat Nomor Admin Di Menu Utama.<br><br>3. Lalu Chat Admin Dengan Kata Kunci "CUAN" Nanti Akan di Respon Oleh Admin.<br><br>4. Kamu Akan Diberikan Tugas Yang Bisa Kamu Lakukan Untuk Mendapat Cuan, Lakukan Sesuai Perintah Agar Sesuai Ketentuan.<br><br><strong>Catatan:</strong> Uang Akan Dikirmkan Oleh Admin Dari Nomor Rekening Tujuan Yang Kamu Kirim, Pastikan Rekening Tujuan Benar.</p>
+    <button class="cuan-help-close" type="button" onclick="closeCuanHelp()">MENGERTI</button>
+  </div>
+</div>
+
+<div id="vipModal" class="vip-modal" role="dialog" aria-modal="true" aria-labelledby="vipTitle">
+  <div class="vip-box"><h2 id="vipTitle">👑 LOGIN VIP</h2><p>Masukkan username dan password VIP Anda.</p>
+    <form id="vipLoginForm">
+      <input id="vipUsername" class="vip-input" placeholder="Username" autocomplete="username" required>
+      <input id="vipPassword" class="vip-input" type="password" placeholder="Password" autocomplete="current-password" required>
+      <div id="vipError" class="vip-error" role="alert"></div>
+      <div class="vip-actions"><button type="button" onclick="closeVipLogin()">BATAL</button><button id="vipSubmit" type="submit" class="vip-submit">LOGIN</button></div>
+    </form>
+  </div>
+</div>
 <div id="settingxToast" class="settingx-toast" role="status" aria-live="polite"></div>
+<script src="./config.js"></script>
 <script>
-const links={social:'https://youtube.com/@vortex_verse_id?si=TnfTcHXUhHmrmo3w',bug:'https://whatsapp.com/channel/0029Vb65oya2Jl8IkD5zyM2a',sensitivity:'MASUKKAN_LINK_GENERAL_DI_SINI'};
-function openLink(key){if(links[key])window.open(links[key],'_blank');else showMessage('Link belum diatur. Isi URL pada objek "links" di bagian JavaScript.');}
-function showMessage(message){alert(message);}
-function launchApp(packageName) {
-  const url = packageName === 'com.dts.freefireth'
-    ? 'https://play.google.com/store/apps/details?id=com.dts.freefireth'
-    : 'https://play.google.com/store/apps/details?id=com.dts.freefiremax';
+const menu3Links={admin:'https://wa.me/6287875761399',developer:'https://wa.me/6287875761399',wa1:'https://whatsapp.com/channel/0029Vb65oya2Jl8IkD5zyM2a',wa2:'https://whatsapp.com/channel/0029VbCMa72GehEEp610282n',youtube:'https://youtube.com/@vortex_verse_id?si=TnfTcHXUhHmrmo3w',tiktok:'https://tiktok.com/@ffxmalzxiter'};
+function toggleMenu3(event){event.stopPropagation();const btn=document.getElementById('menu3Btn'),menu=document.getElementById('menu3Dropdown'),open=!menu.classList.contains('show');menu.classList.toggle('show',open);btn.classList.toggle('active',open);btn.setAttribute('aria-expanded',String(open))}
+function closeMenu3(){const menu=document.getElementById('menu3Dropdown'),btn=document.getElementById('menu3Btn');if(menu&&btn){menu.classList.remove('show');btn.classList.remove('active');btn.setAttribute('aria-expanded','false')}}
+function openMenuLink(key){closeMenu3();const url=menu3Links[key];if(url)window.open(url,'_blank','noopener,noreferrer');else showMessage('Link '+key.toUpperCase()+' belum diatur. Tambahkan URL-nya di variabel menu3Links pada script.')}
+document.addEventListener('click',function(event){if(!event.target.closest('.menu3-wrap'))closeMenu3()});
+const links={social:'https://youtube.com/@vortex_verse_id?si=TnfTcHXUhHmrmo3w',bug:'https://whatsapp.com/channel/0029Vb65oya2Jl8IkD5zyM2a'};
+function openLink(key){if(links[key])window.open(links[key],'_blank','noopener,noreferrer');else showMessage('Link belum diatur.')}
+function showMessage(message){alert(message)}
 
-  window.location.href =
-    'intent://#Intent;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;package='
-    + packageName
-    + ';S.browser_fallback_url='
-    + encodeURIComponent(url)
-    + ';end';
-}
-  window.location.href = 'intent://#Intent;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;package=' + packageName + ';end';
-  
-let settingxToastTimer;
-function showSettingXToast(message){
-  const toast=document.getElementById("settingxToast");
-  toast.textContent=message;
-  toast.classList.add("show");
-  clearTimeout(settingxToastTimer);
-  settingxToastTimer=setTimeout(()=>toast.classList.remove("show"),3000);
-}
-function toggleSettingX(button){
-  const enabled=button.getAttribute("aria-checked")==="true";
-  const nextEnabled=!enabled;
-  button.setAttribute("aria-checked",String(nextEnabled));
-  const label=button.getAttribute("aria-label") || "Pengaturan";
-  showSettingXToast(label+" "+(nextEnabled?"Aktif":"Non Aktif"));
-}
-function updateSensValue(id){
-  const slider=document.getElementById(id);
-  document.getElementById(id+'Value').textContent=slider.value;
-  document.getElementById('sensNote').textContent='Nilai sensitivitas sudah disesuaikan. Ini referensi pengaturan; hasil dapat berbeda di tiap perangkat.';
-}
-const TOKEN_KEY='vv_vip_token';
-function getToken(){try{return localStorage.getItem(TOKEN_KEY)||'';}catch(e){return '';}}
-function setToken(t){try{t?localStorage.setItem(TOKEN_KEY,t):localStorage.removeItem(TOKEN_KEY);}catch(e){}}
-
-async function vipApi(action,data){
-  const res=await fetch('/api/vip',{
-    method:'POST',headers:{'Content-Type':'application/json'},
-    body:JSON.stringify(Object.assign({action},data||{}))
-  });
-  return res.json();
-}
-
-function showVipPage(){
-  document.getElementById('homePage').style.display='none';
-  document.getElementById('vipPage').style.display='block';
+/* ===== NAVIGASI HALAMAN FITUR ===== */
+function openFeaturePage(pageId){
+  const pageIds=['homePage','freePage','vipPage','configPage','cuanPage','fileFFPage','testiPage'];
+  pageIds.forEach(id=>{const p=document.getElementById(id);if(p)p.style.display='none'});
+  const target=document.getElementById(pageId);
+  if(target)target.style.display='block';
+  if(pageId==='fileFFPage')renderFileFF();
+  if(pageId==='testiPage')loadTesti();
+  closeMenu3();
   window.scrollTo(0,0);
 }
-function showHomePage(){
-  document.getElementById('vipPage').style.display='none';
+function closeFeaturePage(){
+  ['configPage','cuanPage','fileFFPage','testiPage'].forEach(id=>document.getElementById(id).style.display='none');
   document.getElementById('homePage').style.display='block';
   window.scrollTo(0,0);
 }
+function openCuanHelp(){document.getElementById('cuanHelpModal').classList.add('show')}
+function closeCuanHelp(){document.getElementById('cuanHelpModal').classList.remove('show')}
+document.getElementById('cuanHelpModal').addEventListener('click',function(event){if(event.target===this)closeCuanHelp()});
 
-function openVipLogin(){
-  if(getToken()){checkSession(true);return;}
-  document.getElementById('vipModal').classList.add('show');
-  document.getElementById('vipError').style.display='none';
-  document.getElementById('vipUsername').focus();
-}
-function closeVipLogin(){document.getElementById('vipModal').classList.remove('show');}
+/* ===== DATA FILE FF (isi di sini) ===== */
+const fileFFList=[
+  // {judul:'Nama File',deskripsi:'Keterangan singkat',url:'https://link-download'},
+];
 
-async function loginVip(event){
-  event.preventDefault();
-  const err=document.getElementById('vipError');
-  const btn=event.target.querySelector('.vip-submit');
-  err.style.display='none';btn.disabled=true;
-  try{
-    const data=await vipApi('login',{
-      username:document.getElementById('vipUsername').value.trim(),
-      password:document.getElementById('vipPassword').value
-    });
-    if(data.ok){setToken(data.token);closeVipLogin();showVipPage();}
-    else{err.textContent=data.error||'Username atau password salah.';err.style.display='block';}
-  }catch(e){
-    err.textContent='Tidak bisa terhubung ke server. Coba lagi.';
-    err.style.display='block';
+/* ===== DATA TESTIMONI CADANGAN (dipakai kalau /api/testi belum aktif) ===== */
+const testiList=[
+  // {foto:'https://files.catbox.moe/xxxxx.png',judul:'Testi dari Budi'},
+];
+
+const isHttp=u=>/^https?:\/\//i.test(u||'');
+
+function renderFileFF(){
+  const box=document.getElementById('fileFFList');
+  box.innerHTML='';
+  if(!fileFFList.length){
+    box.innerHTML='<div class="empty-card">📂<br>Belum ada file. List akan segera ditambahkan.</div>';
+    return;
   }
-  btn.disabled=false;
+  fileFFList.forEach(f=>{
+    const card=document.createElement('div');card.className='item-card';
+    const icon=document.createElement('div');icon.className='app-icon';icon.textContent='📁';
+    const info=document.createElement('div');info.className='item-info';
+    const h=document.createElement('h3');h.textContent=f.judul||'File';
+    const p=document.createElement('p');p.textContent=f.deskripsi||'';
+    info.append(h,p);
+    const btn=document.createElement('button');btn.className='badge';btn.type='button';btn.textContent='UNDUH';
+    btn.onclick=()=>{if(isHttp(f.url))window.open(f.url,'_blank','noopener,noreferrer');else showMessage('Link file belum diatur.')};
+    card.append(icon,info,btn);
+    box.appendChild(card);
+  });
 }
 
-async function checkSession(openModalIfInvalid){
-  const token=getToken();
-  if(!token)return;
+async function loadTesti(){
+  const grid=document.getElementById('testiGrid');
+  grid.style.display='block';
+  grid.innerHTML='<div class="empty-card">⏳<br>Memuat testimoni...</div>';
+  let items=testiList;
   try{
-    const data=await vipApi('session',{token});
-    if(data.ok){showVipPage();return;}
-    setToken('');
-    if(openModalIfInvalid)openVipLogin();
-  }catch(e){
-    if(openModalIfInvalid)showSettingXToast('Tidak bisa terhubung ke server.');
+    const r=await fetch('/api/testi',{cache:'no-store'});
+    if(r.ok){const d=await r.json();if(Array.isArray(d.items))items=d.items}
+  }catch(e){}
+  renderTesti(items);
+}
+function renderTesti(items){
+  const grid=document.getElementById('testiGrid');
+  grid.innerHTML='';
+  if(!items.length){
+    grid.style.display='block';
+    grid.innerHTML='<div class="empty-card">⭐<br>Belum ada testimoni.</div>';
+    return;
   }
+  grid.style.display='grid';
+  items.forEach(t=>{
+    const card=document.createElement('div');card.className='testi-card';
+    const img=document.createElement('img');img.loading='lazy';img.alt=t.judul||'Testimoni';
+    img.src=isHttp(t.foto)?t.foto:'https://placehold.co/300x400/19172b/b58aff?text=FOTO';
+    img.onerror=function(){this.onerror=null;this.src='https://placehold.co/300x400/19172b/b58aff?text=FOTO+TIDAK+TERSEDIA'};
+    img.onclick=()=>{document.getElementById('testiViewerImg').src=img.src;document.getElementById('testiViewer').classList.add('show')};
+    const title=document.createElement('div');title.className='testi-title';title.textContent=t.judul||'';
+    card.append(img,title);
+    grid.appendChild(card);
+  });
 }
 
-function logoutVip(){
-  const token=getToken();
-  setToken('');
-  if(token)vipApi('logout',{token}).catch(()=>{});
-  document.getElementById('vipUsername').value='';
-  document.getElementById('vipPassword').value='';
-  showHomePage();
-}
-
-checkSession(false);
+(function detectAndroid(){
+  const match = navigator.userAgent.match(/Android\s([\d.]+)/i);
+  const versionEl = document.getElementById('androidVersion');
+  const statusEl = document.getElementById('deviceStatus');
+  const checkEl = document.getElementById('deviceCheck');
+  if (!versionEl || !statusEl || !checkEl) return;
+  if (match) {
+    const version = match[1];
+    const major = Number.parseInt(version.split('.')[0], 10);
+    versionEl.textContent = version;
+    const compatible = Number.isFinite(major) && major >= 8;
+    statusEl.textContent = compatible ? 'Compatible' : 'Not Compatible';
+    checkEl.textContent = compatible ? '✓' : '✕';
+    checkEl.style.color = compatible ? '#19d6a0' : '#ff5555';
+  } else {
+    versionEl.textContent = '?';
+    statusEl.textContent = 'Unknown';
+    checkEl.textContent = '!';
+    checkEl.style.color = '#ffc04d';
+  }
+})();
+function launchApp(packageName){const fallbackUrl='https://play.google.com/store/apps/details?id='+encodeURIComponent(packageName);window.location.href='intent://#Intent;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;package='+packageName+';S.browser_fallback_url='+encodeURIComponent(fallbackUrl)+';end'}
+let settingxToastTimer;function showSettingXToast(message){const toast=document.getElementById('settingxToast');toast.textContent=message;toast.classList.add('show');clearTimeout(settingxToastTimer);settingxToastTimer=setTimeout(()=>toast.classList.remove('show'),2000)}
+function showFreeNotice(){document.getElementById('homePage').style.display='none';document.getElementById('vipPage').style.display='none';document.getElementById('freePage').style.display='block';window.scrollTo(0,0)}
+function closeFreePage(){document.getElementById('freePage').style.display='none';document.getElementById('homePage').style.display='block';window.scrollTo(0,0)}
+function openVipLogin(){document.getElementById('vipModal').classList.add('show');document.getElementById('vipError').style.display='none';document.getElementById('vipUsername').focus()}
+function closeVipLogin(){document.getElementById('vipModal').classList.remove('show')}
+function showVipError(message){const e=document.getElementById('vipError');e.textContent=message;e.style.display='block'}
+async function callVipApi(payload){const response=await fetch('/api/vip',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});const data=await response.json().catch(()=>({}));if(!response.ok||data.ok===false)throw new Error(data.error||'Login VIP gagal. Periksa username dan password.');return data}
+document.getElementById('vipLoginForm').addEventListener('submit',async function(event){event.preventDefault();const btn=document.getElementById('vipSubmit');btn.disabled=true;btn.textContent='MEMERIKSA...';document.getElementById('vipError').style.display='none';try{const d=await callVipApi({action:'login',username:document.getElementById('vipUsername').value.trim(),password:document.getElementById('vipPassword').value});sessionStorage.setItem('vv_vip_token',d.token);closeVipLogin();await showVipDashboard(d.username,d.expiresAt)}catch(e){showVipError(e.message)}finally{btn.disabled=false;btn.textContent='LOGIN'}});
+async function showVipDashboard(username,expiresAt){document.getElementById('homePage').style.display='none';document.getElementById('freePage').style.display='none';document.getElementById('vipPage').style.display='block';document.getElementById('vipName').textContent=username;document.getElementById('vipExpiry').textContent='Masa aktif sampai: '+new Date(expiresAt).toLocaleString('id-ID');window.scrollTo(0,0)}
+async function verifyVipSession(){const token=sessionStorage.getItem('vv_vip_token');if(!token)return;try{const d=await callVipApi({action:'session',token});if(d.valid)await showVipDashboard(d.username,d.expiresAt);else sessionStorage.removeItem('vv_vip_token')}catch{sessionStorage.removeItem('vv_vip_token')}}
+function logoutVip(){sessionStorage.removeItem('vv_vip_token');document.getElementById('vipPage').style.display='none';document.getElementById('homePage').style.display='block';document.getElementById('vipUsername').value='';document.getElementById('vipPassword').value='';window.scrollTo(0,0)}
+document.getElementById('vipModal').addEventListener('click',e=>{if(e.target.id==='vipModal')closeVipLogin()});
+function toggleSettingX(button){const enabled=button.getAttribute('aria-checked')==='true',next=!enabled;button.setAttribute('aria-checked',String(next));showSettingXToast((button.getAttribute('aria-label')||'Pengaturan')+' '+(next?'Aktif':'Non Aktif'))}
+function updateSensValue(id){const slider=document.getElementById(id);document.getElementById(id+'Value').textContent=slider.value;document.getElementById('sensNote').textContent='Nilai sensitivitas sudah disesuaikan. Ini referensi pengaturan; hasil dapat berbeda di tiap perangkat.'}
+verifyVipSession();
 </script>
 </body>
 </html>
