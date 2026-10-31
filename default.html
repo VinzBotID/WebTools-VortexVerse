@@ -132,12 +132,14 @@ button:active{transform:scale(.98)}
 .cuan-help-box p{margin:0;color:#b2aec5;font-size:13px;line-height:1.8}
 .cuan-help-close{width:100%;margin-top:18px;padding:12px;border:1px solid #b17cff88;border-radius:12px;background:linear-gradient(100deg,#6d3bba,#3b4a9b);color:#fff;font-weight:850}
 
-/* FILE FF + TESTIMONI */
+/* FILE FF + TESTIMONI + CONFIG */
 .empty-card{margin-top:16px;padding:28px 14px;border:1px dashed var(--line);border-radius:18px;text-align:center;color:var(--muted);font-size:13px;line-height:1.9}
-.testi-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:15px}
-.testi-card{min-width:0;overflow:hidden;border:1px solid var(--line);border-radius:18px;background:linear-gradient(145deg,rgba(28,25,47,.96),rgba(14,22,37,.97));box-shadow:0 12px 28px #0002}
-.testi-card img{display:block;width:100%;aspect-ratio:3/4;object-fit:cover;background:#111020;cursor:pointer}
-.testi-card .testi-title{padding:10px 11px;font-size:12px;font-weight:850;line-height:1.4;text-align:center;overflow-wrap:anywhere}
+.testi-grid,.config-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:15px}
+.testi-card,.config-card{min-width:0;overflow:hidden;border:1px solid var(--line);border-radius:18px;background:linear-gradient(145deg,rgba(28,25,47,.96),rgba(14,22,37,.97));box-shadow:0 12px 28px #0002}
+.testi-card img,.config-card img{display:block;width:100%;aspect-ratio:3/4;object-fit:cover;background:#111020;cursor:pointer}
+.testi-card .testi-title,.config-card .config-title{padding:10px 11px;font-size:12px;font-weight:850;line-height:1.4;text-align:center;overflow-wrap:anywhere}
+.config-download{display:block;width:calc(100% - 18px);margin:0 9px 10px;padding:10px 7px;border:1px solid #8d71ed99;border-radius:11px;background:linear-gradient(120deg,#29204a,#172b49);color:#d0bcff;font-size:11px;font-weight:900;text-align:center}
+.config-download:disabled{opacity:.5;cursor:not-allowed}
 .testi-viewer{position:fixed;inset:0;z-index:10002;display:none;align-items:center;justify-content:center;padding:16px;background:#05040bf2}
 .testi-viewer.show{display:flex}
 .testi-viewer img{max-width:100%;max-height:100%;border-radius:12px}
@@ -176,7 +178,6 @@ button:active{transform:scale(.98)}
     <button class="user-card vip" onclick="openVipLogin()"><span class="user-icon">👑</span><strong>USER VIP</strong><small>AKSES PREMIUM</small></button>
   </div>
 
-  <!-- CARD CONFIG, CUAN, FILE FF, TESTIMONI -->
   <div class="new-feature-cards">
     <button class="new-feature-card" type="button" onclick="openFeaturePage('configPage')">
       <span class="new-feature-icon">⚙️</span>
@@ -190,20 +191,19 @@ button:active{transform:scale(.98)}
       <small>5 MENIT CUAN 20K</small>
       <span class="feature-arrow">LIHAT DETAIL →</span>
     </button>
-    <button class="new-feature-card fileff" type="button" onclick="openFeaturePage('fileFFPage')">
+    <button class="new-feature-card fileff" type="button" onclick="openFeaturePage('fileFFPage')" style="background:linear-gradient(145deg,#24183b,#12243a);border-color:var(--line);">
       <span class="new-feature-icon">📁</span>
-      <strong>FILE FF</strong>
+      <strong>FILE FREE FIRE</strong>
       <small>List File Free Fire</small>
       <span class="feature-arrow">BUKA MENU →</span>
     </button>
-    <button class="new-feature-card testi" type="button" onclick="openFeaturePage('testiPage')">
+    <button class="new-feature-card testi" type="button" onclick="openFeaturePage('testiPage')" style="background:linear-gradient(145deg,#382044,#182e50);border-color:#ff4d8399;">
       <span class="new-feature-icon">⭐</span>
       <strong>TESTIMONI</strong>
       <small>All Testimoni Vortex</small>
       <span class="feature-arrow">LIHAT DETAIL →</span>
     </button>
   </div>
-  <!-- AKHIR CARD -->
 
   <section class="main-card"><div class="card-title"><span class="sym">⬡</span> TOOLS VORTEX VERSE</div><p class="desc">Welcome In WebTools Vortex Verse, Website Ini Digunakan Untuk Meningkatkan Performa Permainan. WEBTOOLS VERSION 1.0.</p><button class="pill-button" onclick="openLink('bug')">✚ &nbsp; Lapor Bug</button></section>
   <div class="section-heading"><span class="sym">▣</span> GAME</div>
@@ -248,21 +248,10 @@ button:active{transform:scale(.98)}
     <div class="section-heading"><span class="sym">⚙</span> VIP TOOLS</div>
     <section class="main-card"><div class="card-title">AKSES VIP AKTIF</div></section>
     <section class="settingx-card" aria-label="VIP Switch Menu">
-      <div class="settingx-heading" style="margin-top:0;margin-bottom:15px;border-bottom:1px solid var(--line);">
-        <span class="sym">👑</span> VIP SWITCH MENU
-      </div>
-      <div class="settingx-row">
-        <span class="settingx-label">HEADLOCK 100%</span>
-        <button class="settingx-switch" type="button" role="switch" aria-checked="false" aria-label="Headlock 100%" onclick="toggleSettingX(this)"></button>
-      </div>
-      <div class="settingx-row">
-        <span class="settingx-label">HOLOGRAM CHAR</span>
-        <button class="settingx-switch" type="button" role="switch" aria-checked="false" aria-label="Hologram Char" onclick="toggleSettingX(this)"></button>
-      </div>
-      <div class="settingx-row">
-        <span class="settingx-label">BODY HS</span>
-        <button class="settingx-switch" type="button" role="switch" aria-checked="false" aria-label="Body Hs" onclick="toggleSettingX(this)"></button>
-      </div>
+      <div class="settingx-heading" style="margin-top:0;margin-bottom:15px;border-bottom:1px solid var(--line);"><span class="sym">👑</span> VIP SWITCH MENU</div>
+      <div class="settingx-row"><span class="settingx-label">HEADLOCK 100%</span><button class="settingx-switch" type="button" role="switch" aria-checked="false" aria-label="Headlock 100%" onclick="toggleSettingX(this)"></button></div>
+      <div class="settingx-row"><span class="settingx-label">HOLOGRAM CHAR</span><button class="settingx-switch" type="button" role="switch" aria-checked="false" aria-label="Hologram Char" onclick="toggleSettingX(this)"></button></div>
+      <div class="settingx-row"><span class="settingx-label">BODY HS</span><button class="settingx-switch" type="button" role="switch" aria-checked="false" aria-label="Body Hs" onclick="toggleSettingX(this)"></button></div>
     </section>
     <section class="main-card">
       <div class="card-title"><span class="sym">⬇</span> FILE HEADLOCK V1</div>
@@ -283,11 +272,7 @@ button:active{transform:scale(.98)}
     <div class="home"><span class="sym">⚙️</span> CONFIG MENU</div>
     <section class="feature-main">
       <div class="card-title"><span class="sym">◆</span> CONFIG FREE FIRE</div>
-      <div class="coming-card">
-        <div class="coming-icon">🚧</div>
-        <div class="coming-title">COMING SOON!</div>
-        <p class="coming-desc">Fitur CONFIG sedang dalam tahap persiapan. Silakan kembali lagi nanti untuk melihat pembaruan berikutnya.</p>
-      </div>
+      <div id="configGrid" class="config-grid"></div>
     </section>
   </div>
 </section>
@@ -301,28 +286,16 @@ button:active{transform:scale(.98)}
   </header>
   <div class="section">
     <div class="home"><span class="sym">💰</span> 5 MENIT CUAN 20K</div>
-
     <div class="cuan-photo-wrap">
-      <!-- GANTI URL DI BAWAH INI DENGAN URL FOTO MILIK KAMU -->
-      <img
-        class="cuan-photo"
-        id="cuanPhoto"
-        src="https://files.catbox.moe/0f7sam.png"
-        alt="Foto informasi cuan"
-        onerror="this.onerror=null;this.src='https://placehold.co/760x420/19172b/b58aff?text=FOTO+TIDAK+TERSEDIA'">
+      <img class="cuan-photo" id="cuanPhoto" src="https://files.catbox.moe/0f7sam.png" alt="Foto informasi cuan" onerror="this.onerror=null;this.src='https://placehold.co/760x420/19172b/b58aff?text=FOTO+TIDAK+TERSEDIA'">
       <span class="cuan-photo-label">INFO CUAN VORTEX VERSE</span>
     </div>
-
     <section class="cuan-description">
       <h3>💸 INFORMASI CUAN</h3>
       <p>Selamat datang di halaman informasi cuan! Di sini kamu bisa mendapatkan 20k secara instan, Untuk cara mendapatkannya sangat gampang dan simpel, baca cara kerja cara kerja cuan untuk info selanjutnya</p>
     </section>
-
     <div class="cuan-help-row">
-      <div class="cuan-help-text">
-        <strong>❓ CARA KERJA CUAN</strong>
-        <small>Tekan tombol tanda tanya untuk membaca penjelasan cara kerja dan hal-hal yang perlu diperhatikan.</small>
-      </div>
+      <div class="cuan-help-text"><strong>❓ CARA KERJA CUAN</strong><small>Tekan tombol tanda tanya untuk membaca penjelasan cara kerja dan hal-hal yang perlu diperhatikan.</small></div>
       <button class="cuan-help-button" type="button" aria-label="Cara kerja mendapatkan cuan" onclick="openCuanHelp()">?</button>
     </div>
   </div>
@@ -356,7 +329,6 @@ button:active{transform:scale(.98)}
 
 <div id="testiViewer" class="testi-viewer" onclick="this.classList.remove('show')"><img id="testiViewerImg" alt="Testimoni"></div>
 
-<!-- POPUP CARA KERJA CUAN -->
 <div id="cuanHelpModal" class="cuan-help-modal" role="dialog" aria-modal="true" aria-labelledby="cuanHelpTitle">
   <div class="cuan-help-box">
     <h2 id="cuanHelpTitle">❓ CARA KERJA CUAN</h2>
@@ -393,6 +365,7 @@ function openFeaturePage(pageId){
   pageIds.forEach(id=>{const p=document.getElementById(id);if(p)p.style.display='none'});
   const target=document.getElementById(pageId);
   if(target)target.style.display='block';
+  if(pageId==='configPage')loadConfig();
   if(pageId==='fileFFPage')renderFileFF();
   if(pageId==='testiPage')loadTesti();
   closeMenu3();
@@ -407,14 +380,19 @@ function openCuanHelp(){document.getElementById('cuanHelpModal').classList.add('
 function closeCuanHelp(){document.getElementById('cuanHelpModal').classList.remove('show')}
 document.getElementById('cuanHelpModal').addEventListener('click',function(event){if(event.target===this)closeCuanHelp()});
 
-/* ===== DATA FILE FF (isi di sini) ===== */
+/* ===== DATA FILE FF ===== */
 const fileFFList=[
   // {judul:'Nama File',deskripsi:'Keterangan singkat',url:'https://link-download'},
 ];
 
-/* ===== DATA TESTIMONI CADANGAN (dipakai kalau /api/testi belum aktif) ===== */
+/* ===== DATA TESTIMONI CADANGAN ===== */
 const testiList=[
   // {foto:'https://files.catbox.moe/xxxxx.png',judul:'Testi dari Budi'},
+];
+
+/* ===== DATA CONFIG CADANGAN ===== */
+const configList=[
+  // {foto:'https://files.catbox.moe/foto.png',judul:'Nama Config',url:'https://link-download'},
 ];
 
 const isHttp=u=>/^https?:\/\//i.test(u||'');
@@ -423,7 +401,29 @@ function renderFileFF(){
   const box=document.getElementById('fileFFList');
   box.innerHTML='';
   if(!fileFFList.length){
-    box.innerHTML='<div class="empty-card">📂<br>Belum ada file. List akan segera ditambahkan.</div>';
+    box.innerHTML=`
+      <div class="empty-card" style="text-align:left;white-space:pre-line">
+        <strong>▼🎯 File Android</strong>
+        <br>• Headlock 50-100%
+        <br>• Bodylock 50-100%
+        <br>• Aimlock 50-100%
+        <br>• EasyDrag 50-100%
+        <br>• Stabilizer 50-100%
+        <br>• Body Hs 100%
+        <br>• Leher Hs 100%
+        <br>• Dada Hs 100%
+        <br>• Hologram
+        <br>• Magic Bullet
+        <br><br>
+        <strong>⭐ Best Seller</strong>
+        <br>HEADLOCK 100% — 15K
+        <br>HEADLOCK 80% — 10K
+        <br>HEADLOCK 50% — 8K
+        <br>BODYLOCK 100% — 10K
+        <br><br>
+        <strong>BUY CHAT 087875761399</strong>
+      </div>
+    `;
     return;
   }
   fileFFList.forEach(f=>{
@@ -440,6 +440,75 @@ function renderFileFF(){
   });
 }
 
+/* ===== CONFIG DARI API ADMIN ===== */
+async function loadConfig(){
+  const grid=document.getElementById('configGrid');
+  grid.style.display='block';
+  grid.innerHTML='<div class="empty-card" style="grid-column:1/-1">⏳<br>Memuat daftar config...</div>';
+
+  let items=configList;
+
+  try{
+    const response=await fetch('/api/config',{cache:'no-store'});
+    if(response.ok){
+      const data=await response.json();
+      if(Array.isArray(data.items))items=data.items;
+    }
+  }catch(error){
+    console.error('Gagal memuat config:',error);
+  }
+
+  renderConfig(items);
+}
+
+function renderConfig(items){
+  const grid=document.getElementById('configGrid');
+  grid.innerHTML='';
+
+  if(!Array.isArray(items)||items.length===0){
+    grid.style.display='block';
+    grid.innerHTML='<div class="empty-card">⚙️<br>Belum ada config yang tersedia.</div>';
+    return;
+  }
+
+  grid.style.display='grid';
+
+  items.forEach(item=>{
+    const card=document.createElement('div');
+    card.className='config-card';
+
+    const img=document.createElement('img');
+    img.loading='lazy';
+    img.alt=item.judul||'Config Free Fire';
+    img.src=isHttp(item.foto)?item.foto:'https://placehold.co/300x400/19172b/b58aff?text=FOTO';
+    img.onerror=function(){
+      this.onerror=null;
+      this.src='https://placehold.co/300x400/19172b/b58aff?text=FOTO+TIDAK+TERSEDIA';
+    };
+
+    const title=document.createElement('div');
+    title.className='config-title';
+    title.textContent=item.judul||'CONFIG FREE FIRE';
+
+    const button=document.createElement('button');
+    button.type='button';
+    button.className='config-download';
+    button.textContent='⬇ DOWNLOAD';
+
+    if(isHttp(item.link)){
+  button.addEventListener('click',()=>{
+    window.open(item.link,'_blank','noopener,noreferrer');
+  });
+}else{
+  button.disabled=true;
+  button.textContent='LINK BELUM TERSEDIA';
+}
+    card.append(img,title,button);
+    grid.appendChild(card);
+  });
+}
+
+/* ===== TESTIMONI ===== */
 async function loadTesti(){
   const grid=document.getElementById('testiGrid');
   grid.style.display='block';
@@ -447,7 +516,10 @@ async function loadTesti(){
   let items=testiList;
   try{
     const r=await fetch('/api/testi',{cache:'no-store'});
-    if(r.ok){const d=await r.json();if(Array.isArray(d.items))items=d.items}
+    if(r.ok){
+      const d=await r.json();
+      if(Array.isArray(d.items))items=d.items;
+    }
   }catch(e){}
   renderTesti(items);
 }
@@ -473,41 +545,135 @@ function renderTesti(items){
 }
 
 (function detectAndroid(){
-  const match = navigator.userAgent.match(/Android\s([\d.]+)/i);
-  const versionEl = document.getElementById('androidVersion');
-  const statusEl = document.getElementById('deviceStatus');
-  const checkEl = document.getElementById('deviceCheck');
-  if (!versionEl || !statusEl || !checkEl) return;
-  if (match) {
-    const version = match[1];
-    const major = Number.parseInt(version.split('.')[0], 10);
-    versionEl.textContent = version;
-    const compatible = Number.isFinite(major) && major >= 8;
-    statusEl.textContent = compatible ? 'Compatible' : 'Not Compatible';
-    checkEl.textContent = compatible ? '✓' : '✕';
-    checkEl.style.color = compatible ? '#19d6a0' : '#ff5555';
-  } else {
-    versionEl.textContent = '?';
-    statusEl.textContent = 'Unknown';
-    checkEl.textContent = '!';
-    checkEl.style.color = '#ffc04d';
+  const match=navigator.userAgent.match(/Android\s([\d.]+)/i);
+  const versionEl=document.getElementById('androidVersion');
+  const statusEl=document.getElementById('deviceStatus');
+  const checkEl=document.getElementById('deviceCheck');
+  if(!versionEl||!statusEl||!checkEl)return;
+  if(match){
+    const version=match[1];
+    const major=Number.parseInt(version.split('.')[0],10);
+    versionEl.textContent=version;
+    const compatible=Number.isFinite(major)&&major>=8;
+    statusEl.textContent=compatible?'Compatible':'Not Compatible';
+    checkEl.textContent=compatible?'✓':'✕';
+    checkEl.style.color=compatible?'#19d6a0':'#ff5555';
+  }else{
+    versionEl.textContent='?';
+    statusEl.textContent='Unknown';
+    checkEl.textContent='!';
+    checkEl.style.color='#ffc04d';
   }
 })();
-function launchApp(packageName){const fallbackUrl='https://play.google.com/store/apps/details?id='+encodeURIComponent(packageName);window.location.href='intent://#Intent;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;package='+packageName+';S.browser_fallback_url='+encodeURIComponent(fallbackUrl)+';end'}
-let settingxToastTimer;function showSettingXToast(message){const toast=document.getElementById('settingxToast');toast.textContent=message;toast.classList.add('show');clearTimeout(settingxToastTimer);settingxToastTimer=setTimeout(()=>toast.classList.remove('show'),2000)}
-function showFreeNotice(){document.getElementById('homePage').style.display='none';document.getElementById('vipPage').style.display='none';document.getElementById('freePage').style.display='block';window.scrollTo(0,0)}
-function closeFreePage(){document.getElementById('freePage').style.display='none';document.getElementById('homePage').style.display='block';window.scrollTo(0,0)}
-function openVipLogin(){document.getElementById('vipModal').classList.add('show');document.getElementById('vipError').style.display='none';document.getElementById('vipUsername').focus()}
+
+function launchApp(packageName){
+  const fallbackUrl='https://play.google.com/store/apps/details?id='+encodeURIComponent(packageName);
+  window.location.href='intent://#Intent;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;package='+packageName+';S.browser_fallback_url='+encodeURIComponent(fallbackUrl)+';end';
+}
+
+let settingxToastTimer;
+function showSettingXToast(message){
+  const toast=document.getElementById('settingxToast');
+  toast.textContent=message;
+  toast.classList.add('show');
+  clearTimeout(settingxToastTimer);
+  settingxToastTimer=setTimeout(()=>toast.classList.remove('show'),2000);
+}
+function showFreeNotice(){
+  document.getElementById('homePage').style.display='none';
+  document.getElementById('vipPage').style.display='none';
+  document.getElementById('freePage').style.display='block';
+  window.scrollTo(0,0);
+}
+function closeFreePage(){
+  document.getElementById('freePage').style.display='none';
+  document.getElementById('homePage').style.display='block';
+  window.scrollTo(0,0);
+}
+function openVipLogin(){
+  document.getElementById('vipModal').classList.add('show');
+  document.getElementById('vipError').style.display='none';
+  document.getElementById('vipUsername').focus();
+}
 function closeVipLogin(){document.getElementById('vipModal').classList.remove('show')}
-function showVipError(message){const e=document.getElementById('vipError');e.textContent=message;e.style.display='block'}
-async function callVipApi(payload){const response=await fetch('/api/vip',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});const data=await response.json().catch(()=>({}));if(!response.ok||data.ok===false)throw new Error(data.error||'Login VIP gagal. Periksa username dan password.');return data}
-document.getElementById('vipLoginForm').addEventListener('submit',async function(event){event.preventDefault();const btn=document.getElementById('vipSubmit');btn.disabled=true;btn.textContent='MEMERIKSA...';document.getElementById('vipError').style.display='none';try{const d=await callVipApi({action:'login',username:document.getElementById('vipUsername').value.trim(),password:document.getElementById('vipPassword').value});sessionStorage.setItem('vv_vip_token',d.token);closeVipLogin();await showVipDashboard(d.username,d.expiresAt)}catch(e){showVipError(e.message)}finally{btn.disabled=false;btn.textContent='LOGIN'}});
-async function showVipDashboard(username,expiresAt){document.getElementById('homePage').style.display='none';document.getElementById('freePage').style.display='none';document.getElementById('vipPage').style.display='block';document.getElementById('vipName').textContent=username;document.getElementById('vipExpiry').textContent='Masa aktif sampai: '+new Date(expiresAt).toLocaleString('id-ID');window.scrollTo(0,0)}
-async function verifyVipSession(){const token=sessionStorage.getItem('vv_vip_token');if(!token)return;try{const d=await callVipApi({action:'session',token});if(d.valid)await showVipDashboard(d.username,d.expiresAt);else sessionStorage.removeItem('vv_vip_token')}catch{sessionStorage.removeItem('vv_vip_token')}}
-function logoutVip(){sessionStorage.removeItem('vv_vip_token');document.getElementById('vipPage').style.display='none';document.getElementById('homePage').style.display='block';document.getElementById('vipUsername').value='';document.getElementById('vipPassword').value='';window.scrollTo(0,0)}
-document.getElementById('vipModal').addEventListener('click',e=>{if(e.target.id==='vipModal')closeVipLogin()});
-function toggleSettingX(button){const enabled=button.getAttribute('aria-checked')==='true',next=!enabled;button.setAttribute('aria-checked',String(next));showSettingXToast((button.getAttribute('aria-label')||'Pengaturan')+' '+(next?'Aktif':'Non Aktif'))}
-function updateSensValue(id){const slider=document.getElementById(id);document.getElementById(id+'Value').textContent=slider.value;document.getElementById('sensNote').textContent='Nilai sensitivitas sudah disesuaikan. Ini referensi pengaturan; hasil dapat berbeda di tiap perangkat.'}
+function showVipError(message){
+  const e=document.getElementById('vipError');
+  e.textContent=message;
+  e.style.display='block';
+}
+async function callVipApi(payload){
+  const response=await fetch('/api/vip',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify(payload)
+  });
+  const data=await response.json().catch(()=>({}));
+  if(!response.ok||data.ok===false)throw new Error(data.error||'Login VIP gagal. Periksa username dan password.');
+  return data;
+}
+document.getElementById('vipLoginForm').addEventListener('submit',async function(event){
+  event.preventDefault();
+  const btn=document.getElementById('vipSubmit');
+  btn.disabled=true;
+  btn.textContent='MEMERIKSA...';
+  document.getElementById('vipError').style.display='none';
+  try{
+    const d=await callVipApi({
+      action:'login',
+      username:document.getElementById('vipUsername').value.trim(),
+      password:document.getElementById('vipPassword').value
+    });
+    sessionStorage.setItem('vv_vip_token',d.token);
+    closeVipLogin();
+    await showVipDashboard(d.username,d.expiresAt);
+  }catch(e){
+    showVipError(e.message);
+  }finally{
+    btn.disabled=false;
+    btn.textContent='LOGIN';
+  }
+});
+async function showVipDashboard(username,expiresAt){
+  document.getElementById('homePage').style.display='none';
+  document.getElementById('freePage').style.display='none';
+  document.getElementById('vipPage').style.display='block';
+  document.getElementById('vipName').textContent=username;
+  document.getElementById('vipExpiry').textContent='Masa aktif sampai: '+new Date(expiresAt).toLocaleString('id-ID');
+  window.scrollTo(0,0);
+}
+async function verifyVipSession(){
+  const token=sessionStorage.getItem('vv_vip_token');
+  if(!token)return;
+  try{
+    const d=await callVipApi({action:'session',token});
+    if(d.valid)await showVipDashboard(d.username,d.expiresAt);
+    else sessionStorage.removeItem('vv_vip_token');
+  }catch{
+    sessionStorage.removeItem('vv_vip_token');
+  }
+}
+function logoutVip(){
+  sessionStorage.removeItem('vv_vip_token');
+  document.getElementById('vipPage').style.display='none';
+  document.getElementById('homePage').style.display='block';
+  document.getElementById('vipUsername').value='';
+  document.getElementById('vipPassword').value='';
+  window.scrollTo(0,0);
+}
+document.getElementById('vipModal').addEventListener('click',e=>{
+  if(e.target.id==='vipModal')closeVipLogin();
+});
+function toggleSettingX(button){
+  const enabled=button.getAttribute('aria-checked')==='true';
+  const next=!enabled;
+  button.setAttribute('aria-checked',String(next));
+  showSettingXToast((button.getAttribute('aria-label')||'Pengaturan')+' '+(next?'Aktif':'Non Aktif'));
+}
+function updateSensValue(id){
+  const slider=document.getElementById(id);
+  document.getElementById(id+'Value').textContent=slider.value;
+  document.getElementById('sensNote').textContent='Nilai sensitivitas sudah disesuaikan. Ini referensi pengaturan; hasil dapat berbeda di tiap perangkat.';
+}
 verifyVipSession();
 </script>
 </body>
