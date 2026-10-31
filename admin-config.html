@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -102,6 +101,8 @@ button.edit{
   width:auto;
   border-radius:12px;
   border:1px solid var(--line);
+  cursor:zoom-in;
+  object-fit:contain;
 }
 .top{
   display:flex;
@@ -127,6 +128,7 @@ button.edit{
   object-fit:cover;
   border-radius:9px;
   background:#111020;
+  cursor:zoom-in;
 }
 .row .t{
   flex:1;
@@ -150,6 +152,40 @@ button.edit{
   font-size:13px;
 }
 .actions{display:flex;flex-direction:column;gap:6px;flex:none}
+
+/* IMAGE VIEWER */
+.image-viewer{
+  display:none;
+  position:fixed;
+  inset:0;
+  z-index:99999;
+  background:rgba(0,0,0,.92);
+  align-items:center;
+  justify-content:center;
+  padding:55px 16px 20px;
+}
+.image-viewer.active{display:flex}
+.image-viewer img{
+  display:block;
+  max-width:100%;
+  max-height:90vh;
+  width:auto;
+  height:auto;
+  object-fit:contain;
+  border-radius:12px;
+}
+.image-viewer button{
+  position:absolute;
+  top:14px;
+  right:14px;
+  width:42px;
+  height:42px;
+  padding:0;
+  border-radius:50%;
+  font-size:22px;
+  background:#29204a;
+  border:1px solid var(--line);
+}
 @media(max-width:420px){
   .row{gap:8px}
   .row img{width:48px;height:64px}
@@ -169,7 +205,6 @@ button.edit{
     <button class="ghost" id="logoutBtn" type="button" style="display:none">KELUAR</button>
   </div>
 
-  <!-- LOGIN -->
   <section class="card" id="loginCard">
     <h2>🔐 Login Admin</h2>
     <form id="loginForm">
@@ -182,58 +217,32 @@ button.edit{
 
   <div id="panel">
 
-    <!-- TAMBAH CONFIG -->
     <section class="card">
       <h2>➕ Tambah Config</h2>
-
       <form id="addForm">
 
         <label for="foto">URL Foto Config</label>
-        <input
-          id="foto"
-          type="url"
-          placeholder="https://files.catbox.moe/foto.png"
-          required
-        >
-
+        <input id="foto" type="url" placeholder="https://files.catbox.moe/foto.png" required>
         <img id="preview" class="preview" alt="Preview config">
 
         <label for="judul">Judul Config</label>
-        <input
-          id="judul"
-          type="text"
-          maxlength="120"
-          placeholder="Contoh: CONFIG VORTEX V1"
-          required
-        >
+        <input id="judul" type="text" maxlength="120" placeholder="Contoh: CONFIG VORTEX V1" required>
 
         <label for="link">Link Download</label>
-        <input
-          id="link"
-          type="url"
-          placeholder="https://contoh.com/download"
-          required
-        >
+        <input id="link" type="url" placeholder="https://contoh.com/download" required>
 
-        <button class="full" type="submit" id="addBtn">
-          TAMBAH CONFIG
-        </button>
-
+        <button class="full" type="submit" id="addBtn">TAMBAH CONFIG</button>
       </form>
-
       <div class="msg" id="addMsg"></div>
     </section>
 
-    <!-- EDIT CONFIG -->
     <section class="card" id="editCard" style="display:none">
       <h2>✏️ Edit Config</h2>
-
       <form id="editForm">
         <input id="editId" type="hidden">
 
         <label for="editFoto">URL Foto Baru</label>
         <input id="editFoto" type="url" required>
-
         <img id="editPreview" class="preview" alt="Preview foto baru">
 
         <label for="editJudul">Judul Config Baru</label>
@@ -242,25 +251,24 @@ button.edit{
         <label for="editLink">Link Download Baru</label>
         <input id="editLink" type="url" required>
 
-        <button class="full" type="submit" id="saveEditBtn">
-          SIMPAN PERUBAHAN
-        </button>
-
-        <button class="full ghost" type="button" id="cancelEditBtn" style="margin-top:8px">
-          BATAL
-        </button>
+        <button class="full" type="submit" id="saveEditBtn">SIMPAN PERUBAHAN</button>
+        <button class="full ghost" type="button" id="cancelEditBtn" style="margin-top:8px">BATAL</button>
       </form>
-
       <div class="msg" id="editMsg"></div>
     </section>
 
-    <!-- DAFTAR CONFIG -->
     <section class="card">
       <h2>📋 Daftar Config (<span id="count">0</span>)</h2>
       <div class="list" id="list"></div>
     </section>
 
   </div>
+</div>
+
+<!-- POPUP GAMBAR -->
+<div class="image-viewer" id="imageViewer">
+  <button type="button" id="closeImageViewer" aria-label="Tutup">✕</button>
+  <img id="fullImagePreview" src="" alt="Preview gambar penuh">
 </div>
 
 <script>
@@ -324,6 +332,32 @@ async function loadList() {
   }
 }
 
+/* MEMPERBESAR GAMBAR */
+function openImagePreview(src) {
+  if (!src) return;
+
+  $('fullImagePreview').src = src;
+  $('imageViewer').classList.add('active');
+}
+
+function closeImagePreview() {
+  $('imageViewer').classList.remove('active');
+  $('fullImagePreview').removeAttribute('src');
+}
+
+$('closeImageViewer').addEventListener('click', closeImagePreview);
+
+$('imageViewer').addEventListener('click', e => {
+  if (e.target === $('imageViewer')) {
+    closeImagePreview();
+  }
+});
+
+$('fullImagePreview').addEventListener('error', () => {
+  closeImagePreview();
+});
+
+/* DAFTAR CONFIG */
 function renderList(items) {
   $('count').textContent = items.length;
 
@@ -346,6 +380,7 @@ function renderList(items) {
     img.src = c.foto;
     img.alt = '';
     img.loading = 'lazy';
+    img.onclick = () => openImagePreview(c.foto);
 
     img.onerror = function() {
       this.onerror = null;
@@ -400,7 +435,7 @@ function renderList(items) {
   });
 }
 
-// EDIT CONFIG
+/* EDIT CONFIG */
 function openEdit(c) {
   $('editId').value = c.id;
   $('editFoto').value = c.foto;
@@ -428,7 +463,7 @@ function closeEdit() {
   setMsg($('editMsg'), '');
 }
 
-// LOGIN
+/* LOGIN */
 $('loginForm').addEventListener('submit', async e => {
   e.preventDefault();
 
@@ -451,7 +486,7 @@ $('loginForm').addEventListener('submit', async e => {
   }
 });
 
-// PREVIEW FOTO TAMBAH
+/* PREVIEW FOTO TAMBAH */
 $('foto').addEventListener('input', () => {
   const v = $('foto').value.trim();
   const p = $('preview');
@@ -461,14 +496,19 @@ $('foto').addEventListener('input', () => {
     p.style.display = 'block';
   } else {
     p.style.display = 'none';
+    p.removeAttribute('src');
   }
+});
+
+$('preview').addEventListener('click', () => {
+  openImagePreview($('preview').src);
 });
 
 $('preview').addEventListener('error', () => {
   $('preview').style.display = 'none';
 });
 
-// TAMBAH CONFIG
+/* TAMBAH CONFIG */
 $('addForm').addEventListener('submit', async e => {
   e.preventDefault();
 
@@ -504,7 +544,7 @@ $('addForm').addEventListener('submit', async e => {
   }
 });
 
-// PREVIEW FOTO EDIT
+/* PREVIEW FOTO EDIT */
 $('editFoto').addEventListener('input', () => {
   const v = $('editFoto').value.trim();
   const p = $('editPreview');
@@ -514,14 +554,19 @@ $('editFoto').addEventListener('input', () => {
     p.style.display = 'block';
   } else {
     p.style.display = 'none';
+    p.removeAttribute('src');
   }
+});
+
+$('editPreview').addEventListener('click', () => {
+  openImagePreview($('editPreview').src);
 });
 
 $('editPreview').addEventListener('error', () => {
   $('editPreview').style.display = 'none';
 });
 
-// SIMPAN EDIT
+/* SIMPAN EDIT */
 $('editForm').addEventListener('submit', async e => {
   e.preventDefault();
 
@@ -561,7 +606,7 @@ $('editForm').addEventListener('submit', async e => {
 
 $('cancelEditBtn').addEventListener('click', closeEdit);
 
-// LOGOUT
+/* LOGOUT */
 $('logoutBtn').addEventListener('click', () => {
   sessionStorage.removeItem(KEY);
   password = '';
@@ -570,7 +615,7 @@ $('logoutBtn').addEventListener('click', () => {
   showLogin();
 });
 
-// LOGIN OTOMATIS SELAMA SESI AKTIF
+/* LOGIN OTOMATIS SELAMA SESI AKTIF */
 (async () => {
   if (!password) return;
 
